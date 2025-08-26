@@ -1,0 +1,40 @@
+table SOMA-TOTAL-PILAR-GPE
+	lineageTag: 2a52638c-6e04-4a7c-adbe-6c84729adf5c
+
+	measure _m-R$TotGPEAreasApoio = ```
+			
+			VAR Dss = 
+			    CALCULATE(
+			        [_m-R$MaiorMelhorAreasApoio],
+			        FAT_AREAS_APOIO[PILAR] = "GPE - DSS"
+			    )
+			VAR Reducao_Esquecimento = 
+			    CALCULATE(
+			        [_m-R$ReducaoEsquecimentoRegistroPontoAreasApoio],
+			        'FAT_AREAS_APOIO'[PILAR] = "GPE - Marcação Ponto"
+			    )
+			RETURN
+			    Dss + Reducao_Esquecimento
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 835450c5-d75e-46f1-b708-429d9c7f4daf
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Column
+		formatString: 0
+		lineageTag: c9d3c5e0-1ee3-4f90-aa85-624663bbba52
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition SOMA-TOTAL-PILAR-GPE = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 11e30c4a56e14d7ba3c4a14f77553ef8
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

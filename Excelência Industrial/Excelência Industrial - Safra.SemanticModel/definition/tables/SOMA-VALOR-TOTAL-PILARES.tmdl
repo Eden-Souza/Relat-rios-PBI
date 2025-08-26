@@ -1,0 +1,299 @@
+table SOMA-VALOR-TOTAL-PILARES
+	lineageTag: dc1e4841-1161-45e8-84df-fd4c7a7df686
+
+	measure _m-TOTAL-EXTRACAO = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-EXTRACAO] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 45c44822-705c-40ab-9abb-c331bce09848
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-UTILIDADES-UVT = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-UTILIDADES-UVT] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: e4fee598-ff8a-46bd-bccf-6addb7695380
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-FABRICA-ACUCAR-UVT = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-FABRICA-ACUCAR-UVT] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: b7ff44ef-80eb-4a42-aa7f-6b9e304bc4b4
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-TRATAMENTO-CALDO-UVT = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-TRATAMENTO-CALDO] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 78cdbb45-09c5-418f-a4d4-b341eea55dc8
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-FABRICA-ETANOL-UVT = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-FABRICA-ETANOL-UVT] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 0c72df32-515d-4fca-a811-9d41cd1c2a84
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-UTILIDADES-UVP = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-UTILIDADES-UVP] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 51ad59d2-1602-4adf-85d6-f01fd6ed88bb
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-TRATAMENTO-CALDO-UVP = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-TRATAMENTO-CALDO-UVP] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: dff27933-ddd6-4338-82f1-0bcadd80b0a1
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-FABRICA-ETANOL-UVP = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-FABRICA-ETANOL-UVP] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 8584e08c-4ef0-4300-b544-00deef8ac871
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-UTILIDADES-UCP = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-UTILIDADES-UCP] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: b02cc1db-f65b-4649-8b8f-32bfacdf1613
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-FABRICA-ACUCAR-UCP = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-FABRICA-ACUCAR-UCP] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 0087064b-9a29-4a7c-b624-e80416592017
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TOTAL-OFICINAS-MANUTENCAO = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
+			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-IPM-OFICINAS-MANUTENCAO] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: df391808-c6c9-49e1-8339-deb4004b5b47
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-AREAS-APOIO-TOTAL-ARMAZEM-UVT = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhorAreasApoio],
+			        'FAT_AREAS_APOIO'[PILAR] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPEAreasApoio] +
+			    [_m-AREAS-APOIO-ARMAZEM-ACUCAR-UVT] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: cc3d65cf-aebb-47db-be03-4d89470d7f9f
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-AREAS-APOIO-TOTAL-IPA-UVT = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhorAreasApoio],
+			        'FAT_AREAS_APOIO'[PILAR] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPEAreasApoio] +
+			    [_m-AREAS-APOIO-INFRAESTRUTURA-PATIOS-UVT] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 7f7c9680-a0e0-4d7e-b23f-a222295dc3bb
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-AREAS-APOIO-LABORATORIO-UVT = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhorAreasApoio],
+			        'FAT_AREAS_APOIO'[PILAR] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPEAreasApoio] +
+			    [_m-AREAS-APOIO-LABORATORIO-IND-UVT] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 8d599004-c603-4153-ad09-1e71e0fd6edc
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-AREAS-APOIO-PCM-UVT = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhorAreasApoio],
+			        'FAT_AREAS_APOIO'[PILAR] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPEAreasApoio] +
+			    [_m-AREAS-APOIO-PCM] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 8bd8ed2e-ea47-4c18-84cd-3d672a27d9be
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Column
+		formatString: 0
+		lineageTag: fa8ae7c4-d021-4c69-8297-63175784560f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition SOMA-VALOR-TOTAL-PILARES = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = a46632e74fcb4528b4826d56e55f4b8b
+

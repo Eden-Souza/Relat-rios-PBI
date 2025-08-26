@@ -1,0 +1,117 @@
+table CALENDARIO-DAX
+	lineageTag: 95859151-d939-40c9-8d43-bbac41bc22e7
+
+	column Date
+		formatString: Short Date
+		lineageTag: b894c603-75f7-467c-881b-08c74df93313
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano
+		formatString: 0
+		lineageTag: e048ef97-735d-4b1f-87b8-8e05e87f48fa
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ano]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		formatString: 0
+		lineageTag: 559d2912-9358-4e67-a5f7-e69c9423da43
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quinzena
+		lineageTag: 3d371217-22de-4c22-8d6e-e2f716bdd33a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quinzena]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome do Mês'
+		lineageTag: 10915634-c68e-4d51-ad29-ed9298fbf562
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nome do Mês]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana'
+		formatString: 0
+		lineageTag: 48fdb154-f059-48b5-87f5-02b1283f1084
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Dia da Semana]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Número da Semana'
+		formatString: 0
+		lineageTag: 97261114-ab32-40e8-ab91-d2e8a45d865c
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Número da Semana]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ano Safra'
+		lineageTag: 3ba528ee-b4f8-40f0-8014-645f4ca3f099
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ano Safra]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Meses Ano Safra'
+		formatString: 0
+		lineageTag: 207ba6f7-7ff9-4450-9ab2-00f259824b08
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Meses Ano Safra]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano_semana
+		lineageTag: 150c1573-5ca6-442d-bf6b-06555637df50
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Ano_semana]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CALENDARIO-DAX = calculated
+		mode: import
+		source = ```
+				
+				    ADDCOLUMNS (
+				        CALENDAR (
+				            DATE ( 2024, 01, 01 ),
+				            TODAY () + 5
+				        ),
+				        "Ano", YEAR ( [Date] ),
+				        "Mês", MONTH ( [Date] ),
+				        "Nome do Mês", UPPER ( FORMAT ( [Date], "MMM" ) ),
+				        "Dia da Semana", WEEKDAY ( [Date] ),
+				        "Número da Semana", WEEKNUM ( [Date] ),
+				        "Ano Safra",
+				            IF (
+				                MONTH ( [Date] ) < 4,
+				                YEAR ( [Date] ) - 1 & "/" & YEAR ( [Date] ),
+				                YEAR ( [Date] ) & "/" & YEAR ( [Date] ) + 1
+				            ),
+				        "Quinzena", IF ( DAY ( [Date] ) < 16, "1", "2" ),
+				        "Meses Ano Safra", MONTH ( [Date] ) - 3,
+				        "Ano_semana", YEAR ( [Date] ) & "-" & WEEKNUM ( [Date], 2 )
+				    )
+				```
+
+	annotation PBI_Id = 80217c93b4ba4ef0a5e9a63b70ee9161
+

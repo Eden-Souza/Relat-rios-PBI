@@ -1,0 +1,268 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 979.44885862400145,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1747.0538141454213,
+            "y": 50.145577241829528
+          },
+          "nodeIndex": "fMarcacoesManuais",
+          "nodeLineageTag": "a14b99ee-2270-4e0d-8797-3c499230eef8",
+          "size": {
+            "height": 489.62866057741712,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 3642.4445257931211,
+            "y": 139.31586914236715
+          },
+          "nodeIndex": "NOVOS-CDC",
+          "nodeLineageTag": "923f535b-f482-47b3-a0ff-53879f59dfb9",
+          "size": {
+            "height": 472.77097804347829,
+            "width": 234
+          },
+          "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 3063.6158286360528,
+            "y": 1324.396401400232
+          },
+          "nodeIndex": "CALENDARIO-DAX",
+          "nodeLineageTag": "95859151-d939-40c9-8d43-bbac41bc22e7",
+          "size": {
+            "height": 391.17453921739138,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 1392.34004918658,
+            "y": 32.3230376906011
+          },
+          "nodeIndex": "UNIDADE",
+          "nodeLineageTag": "30435545-3b77-4606-a1d3-f39f4f6e46b2",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 3400.1265457502891,
+            "y": 925.215919525411
+          },
+          "nodeIndex": "ULTIMA-ATUALIZAÇÃO",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3800.3086061432919,
+            "y": 889.215919525411
+          },
+          "nodeIndex": "SOMA-TOTAL-PILAR-GPE",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3800.3086061432919,
+            "y": 889.215919525411
+          },
+          "nodeIndex": "SOMA-TOTAL-PILAR-IPM",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3800.3086061432919,
+            "y": 889.215919525411
+          },
+          "nodeIndex": "SOMA-VALOR-TOTAL-PILARES",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2659.9939686440757,
+            "y": 978.43183905082185
+          },
+          "nodeIndex": "_DIM_Metas",
+          "size": {
+            "height": 1000,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 979.37561057958874,
+            "y": 42.1875
+          },
+          "nodeIndex": "IPM_fDadosPCPAcumulado",
+          "size": {
+            "height": 412.75351087607106,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1328.6730612333024,
+            "y": 297.74267863371779
+          },
+          "nodeIndex": "IPM_fProlanca",
+          "size": {
+            "height": 304.04182782750979,
+            "width": 383.78248549675686
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2259.5656225469047,
+            "y": 801.02166828057443
+          },
+          "nodeIndex": "FAT_AREAS_APOIO",
+          "size": {
+            "height": 598.54654069565231,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 139.6703858455522,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 1,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [],
+      "name": "Layout 1",
+      "zoomValue": 112.11693641406022,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 2,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [],
+      "name": "Layout 2",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 3,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [],
+      "name": "Layout 3",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 4,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [],
+      "name": "Layout 4",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 5,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [],
+      "name": "Layout 5",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 6,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [],
+      "name": "Layout 6",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 7,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [],
+      "name": "Layout 7",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

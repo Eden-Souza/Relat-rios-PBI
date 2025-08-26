@@ -1,0 +1,51 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+/// DATABASES DO PILAR IPM DAS ÁREASINDUSTRIAIS
+queryGroup 'PILAR IPM'
+
+	annotation PBI_QueryGroupOrder = 0
+
+/// CONTEM DOIS PILARES " DSS E REDUÇÃO DE ESQUECIMENTO REGISTRO DO PONTO "
+queryGroup 'PILAR GPE'
+
+	annotation PBI_QueryGroupOrder = 1
+
+/// TABELA DE PARA:
+///  NOVOS CDCS = ANTIGOS CDCS
+queryGroup 'TABELA DE PARA'
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup 'BASE E MEDIDAS DATABASE SHAREPOINT'
+
+	annotation PBI_QueryGroupOrder = 3
+
+annotation PBIDesktopVersion = 2.144.878.0 (25.06)+9cca29236de5114792f4d7188221f91ad4a5cc50
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["fMarcacoesManuais","FAT_AREAS_APOIO","_DIM_Metas","NOVOS-CDC","IPM_fProlanca","IPM_fDadosPCPAcumulado","ULTIMA-ATUALIZAÇÃO","UNIDADE"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table fMarcacoesManuais
+ref table FAT_AREAS_APOIO
+ref table _DIM_Metas
+ref table NOVOS-CDC
+ref table IPM_fProlanca
+ref table IPM_fDadosPCPAcumulado
+ref table CALENDARIO-DAX
+ref table UNIDADE
+ref table ULTIMA-ATUALIZAÇÃO
+ref table SOMA-TOTAL-PILAR-GPE
+ref table SOMA-TOTAL-PILAR-IPM
+ref table SOMA-VALOR-TOTAL-PILARES
+
+ref cultureInfo pt-BR
+

@@ -1,0 +1,358 @@
+table IPM_fProlanca
+	lineageTag: 48115aa8-3112-4c32-80bf-592bd34bce12
+
+	measure _m-ValorAcumuladoVariavelProlanca = ```
+			
+			SUM('IPM_fProlanca'[LAN_VALOR])
+			
+			```
+		lineageTag: 84a08c85-0605-4174-93ec-0251e233e67e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-ValorAcumuladoVariavelProlancaXXX =
+			
+			CALCULATE(
+			    AVERAGE('IPM_fProlanca'[LAN_VALOR]),
+			    'IPM_fProlanca'[LAN_HORA] = "XXXX")
+		lineageTag: 2b5904f0-0dee-4b4c-8f5b-ea5420b9ec7b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-ProdEtanolXXXXm³ =
+			
+			CALCULATE(
+			    SUM('IPM_fProlanca'[LAN_VALOR]),
+			    FILTER(
+			        'IPM_fProlanca',
+			        'IPM_fProlanca'[VAR_CODIGO]="PRODTOTETA"),
+			        'IPM_fProlanca'[LAN_HORA] = "XXXX"
+			) / 1000
+		lineageTag: 4ebcd710-a43d-4a46-88d5-ed3089ddb4c0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-CartaoMenorMelhorProlancaXXX = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM-VARIAVEIS-PROLANCA
+			
+			VAR REAL = [_m-ValorAcumuladoVariavelProlancaXXX]
+			
+			    VAR RANK1 = SUM(
+			        '_DIM_Metas'[Rank1_Number.1]
+			        )
+			
+			    VAR RANK2 = SUM(
+			        '_DIM_Metas'[Rank2_Number.1]
+			        )
+			
+			    VAR RANK3 = SUM(
+			        '_DIM_Metas'[Rank3_Number.1]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador menor melhor
+			
+			VAR RESULT = 
+			    IF(
+			        REAL < RANK3, 3, // Azul
+			
+			            IF( 
+			                REAL <= RANK2, 2, // Verde
+			
+			                IF(
+			                    REAL <= RANK1, 1, //Amarelo
+			
+			                        0 // Vermelho
+			                )
+			            )
+			    )
+			RETURN
+			    RESULT
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: d68973c8-125a-4544-82c0-ce9e03c53ab2
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-CartaoMaiorMelhorProlancaXXX = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM-VARIAVEIS-PROLANCA
+			
+			VAR REAL = [_m-ValorAcumuladoVariavelProlancaXXX]
+			
+			    VAR RANK1 = SUM(
+			        '_DIM_Metas'[Rank1_Number.1]
+			        )
+			
+			    VAR RANK2 = SUM(
+			        '_DIM_Metas'[Rank2_Number.1]
+			        )
+			
+			    VAR RANK3 = SUM(
+			        '_DIM_Metas'[Rank3_Number.1]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador maior melhor
+			
+			VAR RESULT = 
+			    IF(
+			        REAL < RANK1, 0, // Vermelho
+			
+			            IF( 
+			                REAL <= RANK2, 1, // Amarelo
+			
+			                IF(
+			                    REAL <= RANK3, 2, // Verde
+			
+			                        3 // Azul
+			                )
+			            )
+			    )
+			RETURN
+			    RESULT
+			```
+		formatString: 0
+		lineageTag: d538ab6d-ddb2-4e99-b408-204dc965a7c7
+
+	measure _m-CartaoValorEntre_A-&-B_MelhorProlancaXXX = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM-VARIAVEIS-PCP-ACUMULADO
+			
+			VAR REAL = [_m-ValorAcumuladoVariavelProlancaXXX]
+			
+			    VAR RANK1_MIN = SUM(
+			        '_DIM_Metas'[Rank1_Number.1]
+			        )
+			
+			    VAR RANK2_MIN = SUM(
+			        '_DIM_Metas'[Rank2_Number.1]
+			        )
+			
+			    VAR RANK3_MIN = SUM(
+			        '_DIM_Metas'[Rank3_Number.1]
+			        )
+			
+			
+			    VAR RANK1_MAX = SUM(
+			        '_DIM_Metas'[Rank1_Number.2]
+			        )
+			
+			    VAR RANK2_MAX = SUM(
+			        '_DIM_Metas'[Rank2_Number.2]
+			        )
+			
+			    VAR RANK3_MAX = SUM(
+			        '_DIM_Metas'[Rank3_Number.2]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador maior melhor
+			
+			VAR RESULT = 
+			    IF(
+			        AND(
+			            REAL >= RANK1_MIN, REAL <= RANK2_MIN
+			        ),
+			        1, // Amarelo
+			
+			        IF(
+			            AND(
+			                REAL >= RANK2_MIN, REAL <= RANK3_MIN
+			            ),
+			            2, // Verde
+			
+			            IF(
+			                AND(
+			                    REAL >= RANK3_MIN, REAL <= RANK3_MAX
+			                ),
+			                3, // Azul
+			                    0 // Vermelho
+			            )
+			        )
+			    )
+			                    
+			RETURN
+			    RESULT
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 01795493-b4ee-46eb-860f-00c8824f28e7
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$ValorEntre_A_&_B_ProlancaXxx =
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelProlancaXXX]
+			
+			VAR TOTPONTOS =CALCULATE([_m-ValorAcumuladoVariavelProlancaXXX],ALL('_DIM_Metas'[Indicador]))
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        SUM('_DIM_Metas'[R$_RANK_3]),
+			        VAR CARTAO = [_m-CartaoValorEntre_A-&-B_MelhorProlancaXXX]
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou menor (abaixo do Rank 1), retorna 0
+			                0,
+			                SWITCH(
+			                    CARTAO,
+			                    3, SUM('_DIM_Metas'[R$_RANK_3]),
+			                    2, SUM('_DIM_Metas'[R$_RANK_2]),
+			                    SUM('_DIM_Metas'[R$_RANK_3])  // Padrão (Rank 3 ou outro)
+			                )
+			            )
+			    )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: ac9c2930-3c6d-4261-8e8a-426df15b632e
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$CartaoMaiorMelhorProlancaXxx = ```
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelProlancaXXX]
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        SUM('_DIM_Metas'[R$_RANK_3]),
+			        // Usa a mesma lógica do _m-CartaoMaiorMelhor para determinar qual rank usar
+			        VAR CARTAO = [_m-CartaoMaiorMelhorProlancaXXX]
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou abaixo 
+			                0,             // Retorna 0
+			                SWITCH(
+			                    CARTAO,
+			                    2, SUM('_DIM_Metas'[R$_RANK_2]),  // Rank 2
+			                    3, SUM('_DIM_Metas'[R$_RANK_3]),  // Rank 3
+			                    0  
+			                )
+			            )
+			    )
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: c45606ec-4892-4cf0-a532-5520b0b57588
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$CartaoMenorMelhorProlancaXxx =
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelProlancaXXX]
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        SUM('_DIM_Metas'[R$_RANK_3]),
+			        VAR CARTAO = [_m-CartaoMenorMelhorProlancaXXX]
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou menor (abaixo do Rank 1), retorna 0
+			                0,
+			                SWITCH(
+			                    CARTAO,
+			                    3, SUM('_DIM_Metas'[R$_RANK_3]),
+			                    2, SUM('_DIM_Metas'[R$_RANK_2]),
+			                    SUM('_DIM_Metas'[R$_RANK_3])  // Padrão (Rank 3 ou outro)
+			                )
+			            )
+			    )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: f4ad109e-dc3a-49bf-8ed9-a4445c05c788
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column EMPRESA
+		dataType: string
+		lineageTag: 1fc14bda-4989-4bc7-9b58-bdf20c079b93
+		summarizeBy: none
+		sourceColumn: EMPRESA
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAN_DATA
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 355f1f94-71e4-40ff-b364-4b41ed00bff7
+		summarizeBy: none
+		sourceColumn: LAN_DATA
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column LAN_HORA
+		dataType: string
+		lineageTag: f92335d2-91c6-4070-88a8-3eacf9af8203
+		summarizeBy: none
+		sourceColumn: LAN_HORA
+
+		annotation SummarizationSetBy = Automatic
+
+	column VAR_CODIGO
+		dataType: string
+		lineageTag: a1dfecb5-882d-4526-8fc9-c2f31b663692
+		summarizeBy: none
+		sourceColumn: VAR_CODIGO
+
+		annotation SummarizationSetBy = Automatic
+
+	column VAR_DESCRI
+		dataType: string
+		lineageTag: 1972f11c-2e8a-43ad-94da-c67f3de1dba9
+		summarizeBy: none
+		sourceColumn: VAR_DESCRI
+
+		annotation SummarizationSetBy = Automatic
+
+	column SUF_CODIGO
+		dataType: string
+		lineageTag: fe61bb83-414d-4d7d-978b-f14910a6aff2
+		summarizeBy: none
+		sourceColumn: SUF_CODIGO
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAN_VALOR
+		dataType: double
+		lineageTag: 052121fa-2211-4c1e-bbf5-3f3fd49ff83b
+		summarizeBy: sum
+		sourceColumn: LAN_VALOR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '100 SafraProlanca' = ```
+			
+			
+			IF('IPM_fProlanca'[EMPRESA] = "UVT" && 'IPM_fProlanca'[LAN_DATA] >= DATE(2025,04,01) && 'IPM_fProlanca'[LAN_DATA] <= DATE(2025,11,09),"2025/2026",
+			IF('IPM_fProlanca'[EMPRESA] = "UVP" && 'IPM_fProlanca'[LAN_DATA] >= DATE(2025,04,01) && 'IPM_fProlanca'[LAN_DATA] <= DATE(2025,12,31),"2025/2026",
+			IF('IPM_fProlanca'[EMPRESA] = "UCP" && 'IPM_fProlanca'[LAN_DATA] >= DATE(2025,04,01) && 'IPM_fProlanca'[LAN_DATA] <= DATE(2025,11,15),"2025/2026",
+			
+			BLANK())))
+			
+			```
+		lineageTag: fcfa15fc-dcec-4cd4-ba68-c58118d17d69
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition IPM_fProlanca = m
+		mode: import
+		queryGroup: 'PILAR IPM'
+		source =
+				let
+				    Fonte = Oracle.Database("PPIM", [HierarchicalNavigation=true, Query="select #(lf)    decode(t.emp_codemp, '001','UVT', '002','UVP', '003','UCP') empresa,#(lf)    t.lan_data,#(lf)    t.lan_hora,#(lf)    t.var_codigo,#(lf)    t2.var_descri,#(lf)    t.suf_codigo,#(lf)    t.lan_valor#(lf)    #(lf)#(lf)from pims_pi.prolanca t,#(lf)     pims_pi.provaria t2#(lf)                                #(lf)where   t.emp_codemp = t2.emp_codemp#(lf)    and t.var_codigo = t2.var_codigo#(lf)    and (lan_data >= to_date('01/04/2024', 'dd/mm/yyyy') and lan_data <= trunc(sysdate)- 1)#(lf)    and t.emp_codemp in ('001','002','003')#(lf)   -- and t.lan_hora='XXXX' #(lf)    and t.var_codigo in ('PRODACUTON',  #(lf)                         '0CANAMOIDA',    #(lf)                         'VAZAOAGBRU',#(lf)                         '0000SI_ALI',#(lf)                         '0000PH_ALI',#(lf)                         '00MEDVPSAT',#(lf)                         '000000PZMM',#(lf)                         '00000PZMEL',#(lf)                         '000000BXMM',#(lf)                         '0CORACUCAR',#(lf)                         '000BXXAROP',#(lf)                         '0PRODALCPH',#(lf)                         '0TURBIDEC1',#(lf)                         '0MEDPOLTOR',#(lf)                         'PRODTOTETA',#(lf)                         '00DOSADOPH',#(lf)                         '000SIVAPOR',#(lf)                         '00TURBIDEZ',#(lf)                         'PHCCTURNOS',#(lf)                         '0000DUTOAL',#(lf)                         '00MEDSICAL',#(lf)                         '0000SI_CAL',#(lf)                         '0CMISTOPHF',#(lf)                         '0AGBRUTATC'#(lf)                #(lf)                         )"]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"LAN_DATA", type date}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
