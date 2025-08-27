@@ -1,0 +1,622 @@
+table AREAS-PRODUCAO
+	lineageTag: 1340d5a3-b5de-4ac1-9780-1b026941ff2e
+
+	measure _m-DssMaiorMelhor = ```
+			
+			VAR real = CALCULATE(
+			    SUM(
+			        'AREAS-PRODUCAO'[Resultado]
+			        )                                                            
+			    )
+			    VAR rank1 = SUM(
+			        'AREAS-PRODUCAO'[Rank1_Number.1]
+			        )
+			        VAR rank2 = SUM(
+			            'AREAS-PRODUCAO'[Rank2_Number.1]
+			            )
+			            VAR rank3 = SUM(
+			                'AREAS-PRODUCAO'[Rank3_Number.1]
+			                )
+			VAR RESULT = 
+			    IF(real < rank1, 0 , //vermelho
+			        IF(real < rank2, 1, //amarelo
+			            IF(real < rank3, 2, //verde
+			                      3 //azul
+			            )   
+			        )   
+			    )
+			
+			RETURN
+			
+			RESULT
+			```
+		formatString: 0
+		lineageTag: 6eb94539-dab7-4b08-9af7-8da52e111132
+
+	measure _m-R$GPEMaior =
+			
+			VAR PONTOS = [_m-FiltroGpe]
+			
+			VAR TOTPONTOS = CALCULATE([_m-FiltroGpe],ALL('AREAS-PRODUCAO'[Indicador]))
+			
+			VAR VLRANK2 = (SUM('AREAS-PRODUCAO'[R$_RANK_2])/TOTPONTOS) * PONTOS
+			VAR VLRANK3 = (SUM('AREAS-PRODUCAO'[R$_RANK_3])/TOTPONTOS) * PONTOS
+			
+			VAR COND = SWITCH(TRUE(),
+			           [_m-DssMaiorMelhor] = 2, VLRANK2,
+			           [_m-DssMaiorMelhor] = 3, VLRANK3
+			           )
+			
+			RETURN
+			
+			COND + 0
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: afc4b4b9-d139-4702-a593-d1d5b436ec15
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-FiltroGpe =
+			
+			CALCULATE(
+			    SUM('AREAS-PRODUCAO'[Pontos]),
+			    'AREAS-PRODUCAO'[Pilar] = "GPE")
+		lineageTag: 48b2e55a-fa26-4ed7-9e1f-b00b952cc50d
+
+	measure _m-FiltroIpm =
+			
+			CALCULATE(
+			    SUM('AREAS-PRODUCAO'[Pontos]),
+			    'AREAS-PRODUCAO'[Pilar] = "IPM")
+		lineageTag: 77251c2f-1c6f-434e-a084-8d90ae70ca5b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-FiltroDeepDive =
+			
+			CALCULATE(
+			    SUM('AREAS-PRODUCAO'[Pontos]),
+			    'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE")
+		lineageTag: 74d9f320-1c48-450c-8ff0-a5b96ee819cf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-MenorMelhor =
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Resultado Acumulado
+			var real = SUM('AREAS-PRODUCAO'[Resultado])
+			var rank1 = SUM('AREAS-PRODUCAO'[Rank1_Number.1])
+			var rank2 = SUM('AREAS-PRODUCAO'[Rank2_Number.1])
+			var rank3 = SUM('AREAS-PRODUCAO'[Rank3_Number.1])
+			
+			//para indicador menor melhor
+			var result = IF(real <= rank3, 3, //azul
+			             IF(real <= rank2, 2, //verde
+			             IF(real <= rank1, 1, //amarelo
+			                               0  //vermelho
+			                )))
+			
+			return
+			
+			result
+		formatString: 0
+		lineageTag: 64427c2e-24a2-445f-89fd-c05ac212a117
+
+	measure _m-MaiorMelhor = ```
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Resultado Acumulado
+			var real = SUM('AREAS-PRODUCAO'[Resultado])
+			var rank1 = SUM('AREAS-PRODUCAO'[Rank1_Number.1])
+			var rank2 = SUM('AREAS-PRODUCAO'[Rank2_Number.1])
+			var rank3 = SUM('AREAS-PRODUCAO'[Rank3_Number.1])
+			
+			//para indicador maior melhor
+			var result = IF(real < rank1, 0, //vermelho
+			             IF(real < rank2, 1, //amarelo
+			             IF(real < rank3, 2, //verde
+			                               3  //azul
+			                )))
+			
+			return
+			
+			result
+			
+			
+			
+			```
+		formatString: 0
+		lineageTag: c42a17c3-421f-4a2a-a176-7eb188d67c11
+
+	measure _m-R$MenorMelhor =
+			
+			VAR PONTOS = SUM('AREAS-PRODUCAO'[Resultado])
+			
+			RETURN
+			    IF(
+			        ISBLANK(PONTOS),  // Se PONTOS for em branco
+			        0,                // Retorna 0 (não pontuou)
+			        IF(
+			            PONTOS = 0,   // Se PONTOS = 0
+			            SUM('AREAS-PRODUCAO'[R$_RANK_3]),  // Retorna Rank 3
+			            VAR CARTAO = [_m-MenorMelhor]   // Classificação do cartão (1, 2 ou 3)
+			            RETURN
+			                IF(
+			                    CARTAO <= 1,           // Se for Rank 1 ou abaixo
+			                    0,                     // Retorna 0 (Vermelho)
+			                    SWITCH(
+			                        CARTAO,
+			                        2, SUM('AREAS-PRODUCAO'[R$_RANK_2]),  // Rank 2 (Verde)
+			                        3, SUM('AREAS-PRODUCAO'[R$_RANK_3]),  // Rank 3 (Azul)
+			                        0                                // Fallback
+			                    )
+			                )
+			        )
+			    )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: cfe5110d-d0d9-4897-8d9b-8bca4c08f988
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$MaiorMelhor =
+			
+			VAR PONTOS = SUM('AREAS-PRODUCAO'[Resultado])
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        0,  // Se não pontuou (PONTOS = 0), retorna 0
+			        VAR CARTAO = [_m-MaiorMelhor]  // Classificação do cartão (1, 2 ou 3)
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou abaixo
+			                0,            // Retorna 0 (Vermelho)
+			                SWITCH(
+			                    CARTAO,
+			                    2, SUM('AREAS-PRODUCAO'[R$_RANK_2]),  // Rank 2 (Amarelo)
+			                    3, SUM('AREAS-PRODUCAO'[R$_RANK_3]),  // Rank 3 (Verde)
+			                    0  // Fallback para valores inesperados
+			                )
+			            )
+			    )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 3e491b1f-d7be-4d12-8fef-87bf79c639c4
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$AtividadesForaPlanejado = ```
+			
+			VAR PONTOS = SUM('AREAS-PRODUCAO'[Resultado])
+			
+			// Verifica se PONTOS é igual a 0 e retorna 61,20
+			RETURN 
+			    IF(
+			        PONTOS = 0, 
+			        61.2, 
+			        // Caso contrário, verifica o rank
+			        VAR TOTPONTOS = CALCULATE(SUM('AREAS-PRODUCAO'[Resultado]), ALL('AREAS-PRODUCAO'[Pilar]))
+			        VAR VLRANK2 = 
+			            IF(
+			                TOTPONTOS = 0, 
+			                0, 
+			                (SUM('AREAS-PRODUCAO'[R$_RANK_2]) / TOTPONTOS) * PONTOS
+			            )
+			        VAR VLRANK3 = 
+			            IF(
+			                TOTPONTOS = 0, 
+			                0, 
+			                (SUM('AREAS-PRODUCAO'[R$_RANK_3]) / TOTPONTOS) * PONTOS
+			            )
+			        VAR RESULT = 
+			            SWITCH(
+			                TRUE(),
+			                [_m-MenorMelhor] = 1, 0.00,
+			                [_m-MenorMelhor] = 2, 43.68, // Caso seja rank 2, retorna 43,68
+			                [_m-MenorMelhor] = 3, VLRANK3, // Caso seja rank 3, retorna 61,2
+			                VLRANK2 // Padrão: retorna VLRANK2
+			            )
+			        RETURN RESULT
+			    )
+			
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: ad0768dd-1374-4994-bc8d-94841266d878
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$ValorTotIPMProd = ```
+			
+			VAR Curva_S = 
+			    CALCULATE(
+			        [_m-R$MaiorMelhor],
+			        'AREAS-PRODUCAO'[Indicador] = "Aderência à Curva S",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM"
+			    )
+			VAR Atividade_Fora_Planejado = 
+			    CALCULATE(
+			        [_m-R$AtividadesForaPlanejado],
+			        'AREAS-PRODUCAO'[Indicador] = "Atividade Fora do Planejado",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM"
+			    )
+			VAR Programacao_Semanal = 
+			    CALCULATE(
+			        [_m-R$MaiorMelhor],
+			        'AREAS-PRODUCAO'[Indicador] = "Aderência à Programação Semanal",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM"
+			    )
+			VAR Validacao_Servico = 
+			    CALCULATE(
+			        [_m-R$MaiorMelhor],
+			        'AREAS-PRODUCAO'[Indicador] = "Validação Ordem de Serviço",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM"
+			    )
+			VAR Giro_Hibernacao = 
+			    CALCULATE(
+			        [_m-R$MaiorMelhor],
+			        'AREAS-PRODUCAO'[Indicador] = "Aderência Rota Giro e Hibernação",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM"
+			    )
+			RETURN
+			    Curva_S + Atividade_Fora_Planejado + Programacao_Semanal + Validacao_Servico + Giro_Hibernacao
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 7ef96f20-e2d7-4ec6-8247-e089102f4c4a
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$TotGPE = ```
+			
+			VAR Dss = 
+			    CALCULATE(
+			        [_m-R$MaiorMelhor],
+			        'AREAS-PRODUCAO'[Indicador] = "Participação no DSS",
+			        'AREAS-PRODUCAO'[Pilar] = "GPE"
+			    )
+			VAR Reducao_Esquecimento = 
+			    CALCULATE(
+			        [_m-R$ReducaoEsquecimentoRegistroPonto],
+			        'AREAS-PRODUCAO'[Indicador] = "Redução Marcação de Ponto Manual",
+			        'AREAS-PRODUCAO'[Pilar] = "GPE"
+			    )
+			RETURN
+			    Dss + Reducao_Esquecimento
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: aa97c1b4-b593-44a4-bdd6-f6f363ea9410
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$AcumuladoTotalProd = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhor],
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPE] +
+			    [_m-R$ValorTotIPMProd] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 1f81d4f5-6300-482b-b3f8-3ab3940634e5
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$ValorEntre_A_&_B =
+			
+			VAR PONTOS = SUM('AREAS-PRODUCAO'[Resultado])
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        0,  // Se PONTOS = 0, retorna 0 (não pontuou)
+			        VAR CARTAO = [_m-Entre_A-&-B_Melhor]  // Classificação do cartão (2 ou 3)
+			        RETURN
+			            IF(
+			                CARTAO <= 1,           // Se for Rank 1 ou abaixo
+			                0,                      // Retorna 0 (Vermelho)
+			                SWITCH(
+			                    CARTAO,
+			                    2, SUM('AREAS-PRODUCAO'[R$_RANK_2]),  // Rank 2 (Verde)
+			                    3, SUM('AREAS-PRODUCAO'[R$_RANK_3]),  // Rank 3 (Azul)
+			                    0                                // Fallback
+			                )
+			            )
+			    )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 183c9110-85f1-478b-8b88-7531da692b2b
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-Entre_A-&-B_Melhor = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado dos Resultados Sharepoint
+			
+			VAR REAL = SUM('AREAS-PRODUCAO'[Resultado])
+			
+			    VAR RANK1_MIN = SUM(
+			        'AREAS-PRODUCAO'[Rank1_Number.1]
+			        )
+			
+			    VAR RANK2_MIN = SUM(
+			        'AREAS-PRODUCAO'[Rank2_Number.1]
+			        )
+			
+			    VAR RANK3_MIN = SUM(
+			        'AREAS-PRODUCAO'[Rank3_Number.1]
+			        )
+			
+			
+			    VAR RANK1_MAX = SUM(
+			        'AREAS-PRODUCAO'[Rank1_Number.2]
+			        )
+			
+			    VAR RANK2_MAX = SUM(
+			        'AREAS-PRODUCAO'[Rank2_Number.2]
+			        )
+			
+			    VAR RANK3_MAX = SUM(
+			        'AREAS-PRODUCAO'[Rank3_Number.2]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador maior melhor
+			
+			VAR RESULT = 
+			    IF(
+			        AND(
+			            REAL >= RANK1_MIN, REAL <= RANK2_MIN
+			        ),
+			        1, // Amarelo
+			
+			        IF(
+			            AND(
+			                REAL >= RANK2_MIN, REAL <= RANK3_MIN
+			            ),
+			            2, // Verde
+			
+			            IF(
+			                AND(
+			                    REAL >= RANK3_MIN, REAL <= RANK3_MAX
+			                ),
+			                3, // Azul
+			                    0 // Vermelho
+			            )
+			        )
+			    )
+			                    
+			RETURN
+			    RESULT
+			```
+		formatString: 0
+		lineageTag: 1ed74f9f-60a0-4b84-aa01-7ccf744b5841
+
+	column AnoSafra
+		dataType: string
+		lineageTag: c7ed8d68-5dc8-4d40-9201-cc382e9a8b50
+		summarizeBy: none
+		sourceColumn: AnoSafra
+
+		annotation SummarizationSetBy = Automatic
+
+	column Periodo
+		dataType: string
+		lineageTag: 73ed1f3a-ae51-4a34-9d26-6f99466312c2
+		summarizeBy: none
+		sourceColumn: Periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Empresa
+		dataType: string
+		lineageTag: 7a4649fa-6917-4a7c-b30c-d315aa959cfe
+		summarizeBy: none
+		sourceColumn: Empresa
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setor
+		dataType: string
+		lineageTag: a51c119d-4c2d-48a1-878d-1fc4fc912fe9
+		summarizeBy: none
+		sourceColumn: Setor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pilar
+		dataType: string
+		lineageTag: 4276845c-b107-44f4-b7f3-256db6ea3d56
+		summarizeBy: none
+		sourceColumn: Pilar
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unid.Medida'
+		dataType: string
+		lineageTag: 5e7a6b71-3205-402b-9e78-ddbe63a52425
+		summarizeBy: none
+		sourceColumn: Unid.Medida
+
+		annotation SummarizationSetBy = Automatic
+
+	column Farol
+		dataType: string
+		lineageTag: 3b33bcbc-5847-4522-800b-99e16beedda5
+		summarizeBy: none
+		sourceColumn: Farol
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rank1
+		dataType: string
+		lineageTag: 9a4cb2f5-e5c0-4914-87cf-c02dd79274cb
+		summarizeBy: none
+		sourceColumn: Rank1
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rank2
+		dataType: string
+		lineageTag: e1198cd2-1c7d-4f62-9d9d-f1430d79cbf1
+		summarizeBy: none
+		sourceColumn: Rank2
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rank3
+		dataType: string
+		lineageTag: 1e55df8a-b92e-4bf3-b1e0-5085f9dc0d56
+		summarizeBy: none
+		sourceColumn: Rank3
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pontos
+		dataType: double
+		lineageTag: 36233d1d-b05d-4ee9-959b-d3e8b2f98702
+		summarizeBy: sum
+		sourceColumn: Pontos
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Peso(%)
+		dataType: double
+		lineageTag: d8a8c347-b325-4bda-b0dc-6fee6c6a86ff
+		summarizeBy: sum
+		sourceColumn: Peso(%)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column R$_RANK_2
+		dataType: double
+		lineageTag: b46e5fe3-7afd-41e7-9c7c-cfa37a343698
+		summarizeBy: sum
+		sourceColumn: R$_RANK_2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column R$_RANK_3
+		dataType: double
+		lineageTag: cb2c967a-5d0b-4512-80fe-9dc3c9e88313
+		summarizeBy: sum
+		sourceColumn: R$_RANK_3
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Resultado
+		dataType: double
+		lineageTag: d5eee777-95ce-4981-9c44-31d3895f4ac7
+		summarizeBy: sum
+		sourceColumn: Resultado
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Indicador
+		dataType: string
+		lineageTag: 359b0572-9686-4a76-9142-4698d6bd6248
+		summarizeBy: none
+		sourceColumn: Indicador
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rank1_Number.1'
+		dataType: double
+		lineageTag: 67cac4c3-1107-4d42-855a-2af95cf3796a
+		summarizeBy: sum
+		sourceColumn: Rank1_Number.1
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Rank1_Number.2'
+		dataType: double
+		lineageTag: 2e91d156-0401-4cda-9868-e5ee5be5820a
+		summarizeBy: sum
+		sourceColumn: Rank1_Number.2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Rank2_Number.1'
+		dataType: double
+		lineageTag: c00fd19e-4555-4b9c-86ea-233855ea8cb7
+		summarizeBy: sum
+		sourceColumn: Rank2_Number.1
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Rank2_Number.2'
+		dataType: double
+		lineageTag: fb2fbd60-57f9-4e09-b446-0e0ece8b5305
+		summarizeBy: sum
+		sourceColumn: Rank2_Number.2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Rank3_Number.1'
+		dataType: double
+		lineageTag: 10893076-d827-4272-a145-8be28a4c099d
+		summarizeBy: sum
+		sourceColumn: Rank3_Number.1
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Rank3_Number.2'
+		dataType: double
+		lineageTag: ce4c8c76-947b-4a13-8b65-d16d988146f5
+		summarizeBy: sum
+		sourceColumn: Rank3_Number.2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition AREAS-PRODUCAO = m
+		mode: import
+		queryGroup: 'BASE E MEDIDAS DATABASE SHAREPOINT'
+		source =
+				let
+				    Fonte = SharePoint.Tables("https://valedotijuco.sharepoint.com/sites/GestoIndustrial/progexelencia", [Implementation=null, ApiVersion=15]),
+				    #"0778e051-4cd5-4c53-8bf9-07158fb70b5e" = Fonte{[Id="0778e051-4cd5-4c53-8bf9-07158fb70b5e"]}[Items],
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"0778e051-4cd5-4c53-8bf9-07158fb70b5e",{{"ID", "ID.1"}}),
+				    #"Indicadores Expandido" = Table.ExpandRecordColumn(#"Colunas Renomeadas", "Indicadores", {"Title"}, {"Title.1"}),
+				    #"Outras Colunas Removidas" = Table.SelectColumns(#"Indicadores Expandido",{"AnoSafra", "Periodo", "Empresa", "Setor", "Pilar", "Unid.Medida", "Farol", "Rank1", "Rank2", "Rank3", "Pontos", "Peso(%)", "R$_RANK_2", "R$_RANK_3", "Title.1","Resultado"}),
+				    #"Coluna Duplicada" = Table.DuplicateColumn(#"Outras Colunas Removidas", "Rank1", "Rank1 - Copiar"),
+				    #"Coluna Duplicada1" = Table.DuplicateColumn(#"Coluna Duplicada", "Rank2", "Rank2 - Copiar"),
+				    #"Coluna Duplicada2" = Table.DuplicateColumn(#"Coluna Duplicada1", "Rank3", "Rank3 - Copiar"),
+				    #"Colunas Renomeadas1" = Table.RenameColumns(#"Coluna Duplicada2",{{"Rank1 - Copiar", "Rank1_Number"}, {"Rank2 - Copiar", "Rank2_Number"}, {"Rank3 - Copiar", "Rank3_Number"}}),
+				    #"Dividir Coluna por Delimitador" = Table.SplitColumn(#"Colunas Renomeadas1", "Rank1_Number", Splitter.SplitTextByDelimiter("-", QuoteStyle.None), {"Rank1_Number.1", "Rank1_Number.2"}),
+				    #"Dividir Coluna por Delimitador1" = Table.SplitColumn(#"Dividir Coluna por Delimitador", "Rank2_Number", Splitter.SplitTextByDelimiter("-", QuoteStyle.None), {"Rank2_Number.1", "Rank2_Number.2"}),
+				    #"Dividir Coluna por Delimitador2" = Table.SplitColumn(#"Dividir Coluna por Delimitador1", "Rank3_Number", Splitter.SplitTextByDelimiter("-", QuoteStyle.None), {"Rank3_Number.1", "Rank3_Number.2"}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Dividir Coluna por Delimitador2",{{"AnoSafra", type text}, {"Periodo", type text}, {"Empresa", type text}, {"Setor", type text}, {"Pilar", type text}, {"Unid.Medida", type text}, {"Farol", type text}, {"Rank1", type text}, {"Rank2", type text}, {"Rank3", type text}, {"Peso(%)", Percentage.Type}, {"Pontos", type number}, {"Rank1_Number.1", type number}, {"Rank1_Number.2", type number}, {"Rank2_Number.1", type number}, {"Rank2_Number.2", type number}, {"Rank3_Number.1", type number}, {"Rank3_Number.2", type number}}),
+				    #"Colunas Renomeadas2" = Table.RenameColumns(#"Tipo Alterado",{{"Title.1", "Indicador"}}),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Colunas Renomeadas2",{{"Indicador", type text}, {"R$_RANK_2", type number}, {"R$_RANK_3", type number}}),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Tipo Alterado1", each ([AnoSafra] = "2025/2026")),
+				    #"Tipo Alterado2" = Table.TransformColumnTypes(#"Linhas Filtradas",{{"Resultado", type number}})
+				in
+				    #"Tipo Alterado2"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

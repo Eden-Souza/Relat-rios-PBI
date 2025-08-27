@@ -1,0 +1,33 @@
+table ULTIMA-ATUALIZACAO
+	lineageTag: c785dae4-2523-4b18-b5be-e216bc06f1e1
+
+	column SYSTIMESTAMP
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: cc76a92b-a2f7-4ed1-9aa5-066bf6eeacd4
+		summarizeBy: none
+		sourceColumn: SYSTIMESTAMP
+
+		annotation SummarizationSetBy = Automatic
+
+	column SEMANA_DO_ANO
+		dataType: string
+		lineageTag: ca2e3dc2-7f6e-47ba-b2de-425e73a03b52
+		summarizeBy: none
+		sourceColumn: SEMANA_DO_ANO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ULTIMA-ATUALIZACAO = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Coluna 1" = _t]),
+				    #"Tipo Alterado" = Oracle.Database("PPIM", [HierarchicalNavigation=true, Query="select #(lf)    systimestamp,     #(lf)    to_char(systimestamp, 'IYYY-IW') semana_do_ano#(lf)from dual"])
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,218 @@
+table ESQUECIMENTOS-REGISTRO-PONTO
+	lineageTag: a14b99ee-2270-4e0d-8797-3c499230eef8
+
+	measure _m-R$ReducaoEsquecimentoRegistroPonto = ```
+			
+			VAR PONTOS = [_m-FiltroGpe]
+			
+			VAR TOTPONTOS = CALCULATE([_m-FiltroGpe],ALL('AREAS-PRODUCAO'[Indicador]))
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        SUM('AREAS-PRODUCAO'[R$_RANK_3]),
+			        VAR CARTAO = [_m-CorCartaoMenorMelhorAreasProd&Manut]
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou menor (abaixo do Rank 1), retorna 0
+			                0,
+			                SWITCH(
+			                    CARTAO,
+			                    3, SUM('AREAS-PRODUCAO'[R$_RANK_3]),
+			                    2, SUM('AREAS-PRODUCAO'[R$_RANK_2]),
+			                    SUM('AREAS-PRODUCAO'[R$_RANK_3])  // Padrão (Rank 3 ou outro)
+			                )
+			            )
+			    )
+			
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 550a3bce-e88c-4968-9b9b-6b184ba561ea
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-CorCartaoMenorMelhorAreasProd&Manut = ```
+			
+			    //será utilizado como parâmetro para cor do cartão do resultado do RMP ACUMULADO
+			
+			var real = [_m-DiferençaPercentualEsquecimento]
+			var rank1 = SUM('AREAS-PRODUCAO'[Rank1_Number.1])
+			var rank2 = SUM('AREAS-PRODUCAO'[Rank2_Number.1])
+			var rank3 = SUM('AREAS-PRODUCAO'[Rank3_Number.1])
+			    // Para indicador menor melhor
+			    var result = IF(real < rank1, 0, // vermelho
+			                IF(real < rank2, 1, // amarelo
+			                IF(real < rank3, 2, // verde
+			                                3  // azul
+			                    )))
+			
+			    return
+			result
+			```
+		lineageTag: aa89da10-d4f7-40ca-8a27-04ed60efa054
+
+	measure _m-DiferençaPercentualEsquecimento = ```
+			
+			
+			var safra_anterior = CALCULATE(SUM('ESQUECIMENTOS-REGISTRO-PONTO'[ESQUECIMENTOS]), 
+			    'ESQUECIMENTOS-REGISTRO-PONTO'[DT_REF] >= DATE(2024,04,01),  'ESQUECIMENTOS-REGISTRO-PONTO'[DT_REF] <= DATE(2024,12,01))
+			
+			var safra_atual = CALCULATE(SUM('ESQUECIMENTOS-REGISTRO-PONTO'[ESQUECIMENTOS]), 
+			    'ESQUECIMENTOS-REGISTRO-PONTO'[DT_REF] >= DATE(2025,04,01),  'ESQUECIMENTOS-REGISTRO-PONTO'[DT_REF] <= DATE(2025,12,01))
+			
+			var diferenca_percentual = DIVIDE( safra_anterior - safra_atual, safra_anterior) * 100 
+			
+			return
+			IF (diferenca_percentual > 0, diferenca_percentual, 0)
+			
+			```
+		lineageTag: fcc6e4e7-d8ba-4d8f-b280-6d5cbb98d056
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-QuantidadeEsquecimentoSafraAnterior = ```
+			CALCULATE(SUM('ESQUECIMENTOS-REGISTRO-PONTO'[ESQUECIMENTOS]), 
+			 'ESQUECIMENTOS-REGISTRO-PONTO'[DT_REF] >= DATE(2024,01,01),  'ESQUECIMENTOS-REGISTRO-PONTO'[DT_REF] <= DATE(2024,03,01))
+			```
+		lineageTag: dd8b2c75-c878-4a38-9cb7-575fc8b6f13a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-QuantidadeEsquecimentoSafraAtual = ```
+			CALCULATE(SUM('ESQUECIMENTOS-REGISTRO-PONTO'[ESQUECIMENTOS]), 
+			 'ESQUECIMENTOS-REGISTRO-PONTO'[DT_REF] >= DATE(2025,01,01),  'ESQUECIMENTOS-REGISTRO-PONTO'[DT_REF] <= DATE(2025,03,01))
+			```
+		lineageTag: 18692eaa-b6cf-449f-93df-fa65e5b4de81
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-RMPMenorMelhorAreasApoio = ```
+			
+			    //será utilizado como parâmetro para cor do cartão do resultado do RMP ACUMULADO
+			
+			var real = [_m-DiferençaPercentualEsquecimento]
+			var rank1 = SUM('AREAS-APOIO'[RANK1])
+			var rank2 = SUM('AREAS-APOIO'[Rank2_numero.1])
+			var rank3 = SUM('AREAS-APOIO'[RANK3 _numero.1])
+			    // Para indicador menor melhor
+			    var result = IF(real < rank1, 0, // vermelho
+			                IF(real < rank2, 1, // amarelo
+			                IF(real < rank3, 2, // verde
+			                                3  // azul
+			                    )))
+			
+			    return
+			result
+			```
+		formatString: 0
+		lineageTag: ffb4770f-925c-4075-8981-087f5d3cd1f9
+
+	measure _m-R$ReducaoEsquecimentoRegistroPontoAreasApoio = ```
+			
+			VAR PONTOS = [_m-DiferençaPercentualEsquecimento]
+			
+			VAR TOTPONTOS = CALCULATE([_m-DiferençaPercentualEsquecimento], ALL('AREAS-APOIO'[PILAR]))
+			
+			VAR VLRANK2 = 
+			        IF(
+			            TOTPONTOS <> 0, 
+			            (SUM('AREAS-APOIO'[Valor_rank2]) / TOTPONTOS) * PONTOS, 
+			            0
+			        )
+			
+			VAR VLRANK3 = 
+			        IF(
+			            TOTPONTOS <> 0, 
+			            (SUM('AREAS-APOIO'[Valor_rank3]) / TOTPONTOS) * PONTOS, 
+			            0
+			        )
+			
+			VAR COND = SWITCH(
+			    TRUE(),
+			    [_m-RMPMenorMelhorAreasApoio] = 2, VLRANK2,
+			    [_m-RMPMenorMelhorAreasApoio] = 3, VLRANK3
+			)
+			
+			RETURN
+			COND + 0
+			
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 431332a4-864c-42b3-8ad4-83e37e1a4311
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column UNIDADE
+		dataType: string
+		lineageTag: 35514842-8a7f-499c-98fa-38b8407ae21c
+		summarizeBy: none
+		sourceColumn: UNIDADE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DT_REF
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: f6124869-72f4-45c8-9cd5-f412630dce97
+		summarizeBy: none
+		sourceColumn: DT_REF
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CDC
+		dataType: string
+		lineageTag: 488cf2d7-02bc-47af-bf9f-d5510b116771
+		summarizeBy: none
+		sourceColumn: CDC
+
+		annotation SummarizationSetBy = Automatic
+
+	column MANUAIS
+		dataType: double
+		lineageTag: c2a45df6-f5f8-444f-a41f-178bc7ea249a
+		summarizeBy: sum
+		sourceColumn: MANUAIS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ESQUECIMENTOS
+		dataType: double
+		lineageTag: 081ada6e-46b4-439a-b1be-9cdbb9640177
+		summarizeBy: sum
+		sourceColumn: ESQUECIMENTOS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column %
+		dataType: double
+		lineageTag: 4c6d4fe4-2444-4ba2-bc11-5e5ef1e2a716
+		summarizeBy: sum
+		sourceColumn: %
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition ESQUECIMENTOS-REGISTRO-PONTO = m
+		mode: import
+		queryGroup: 'PILAR GPE'
+		source =
+				let
+				    Fonte = PowerPlatform.Dataflows(null),
+				    Workspaces = Fonte{[Id="Workspaces"]}[Data],
+				    #"2c8b824f-b257-49f1-8fb8-3ea15e5dfaca" = Workspaces{[workspaceId="2c8b824f-b257-49f1-8fb8-3ea15e5dfaca"]}[Data],
+				    #"335abfc0-7601-4b5e-8797-b73024a8bfdb" = #"2c8b824f-b257-49f1-8fb8-3ea15e5dfaca"{[dataflowId="335abfc0-7601-4b5e-8797-b73024a8bfdb"]}[Data],
+				    fMarcacoesManuais_ = #"335abfc0-7601-4b5e-8797-b73024a8bfdb"{[entity="fMarcacoesManuais",version=""]}[Data]
+				in
+				    fMarcacoesManuais_
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,585 @@
+table PCP-ACUMULADO
+	lineageTag: 94163854-b35c-4398-870f-4aa914001a22
+
+	measure _m-ValorAcumuladoVariavelPcp =
+			ROUND(SUM(
+			    'PCP-ACUMULADO'[LAN_VALOR_A]),1)
+			     +0
+		lineageTag: 0136a019-945c-4835-b6ac-24aa8edd69aa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '_m- ValorAcumuladoSacasAcucar' = ```
+			
+			VAR SACAS = (
+			        CALCULATE( 'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp], 
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "PRODACUTON")*1000/50
+			    )
+			
+			VAR CANAMOIDA = 
+			        CALCULATE( 'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp], 
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "0CANAMOIDA")
+			
+			VAR SACASPORTON = SACAS / CANAMOIDA
+			
+			RETURN
+			
+			SACASPORTON
+			```
+		lineageTag: cdcd5c01-360d-42c0-8cc5-f10bf083fe05
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-CartaoMaiorMelhor = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM-VARIAVEIS-PCP-ACUMULADO
+			
+			VAR REAL = [_m-ValorAcumuladoVariavelPcp]
+			
+			    VAR RANK1 = SUM(
+			        'AREAS-PRODUCAO'[Rank1_Number.1]
+			        )
+			
+			    VAR RANK2 = SUM(
+			        'AREAS-PRODUCAO'[Rank2_Number.1]
+			        )
+			
+			    VAR RANK3 = SUM(
+			        'AREAS-PRODUCAO'[Rank3_Number.1]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador maior melhor
+			
+			VAR RESULT = 
+			    IF(
+			        REAL <= RANK1, 0, // Vermelho
+			
+			            IF( 
+			                REAL <= RANK2, 1, // Amarelo
+			
+			                IF(
+			                    REAL < RANK3, 2, // Verde
+			
+			                        3 // Azul
+			                )
+			            )
+			    )
+			RETURN
+			    RESULT
+			```
+		formatString: 0
+		lineageTag: a95cc081-bcf5-458e-9d88-dac20929f86b
+
+	measure _m-CartaoMenorMelhor = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM-VARIAVEIS-PCP-ACUMULADO
+			
+			VAR REAL = [_m-ValorAcumuladoVariavelPcp]
+			
+			    VAR RANK1 = SUM(
+			        'AREAS-PRODUCAO'[Rank1_Number.1]
+			        )
+			
+			    VAR RANK2 = SUM(
+			        'AREAS-PRODUCAO'[Rank2_Number.1]
+			        )
+			
+			    VAR RANK3 = SUM(
+			        'AREAS-PRODUCAO'[Rank3_Number.1]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador menor melhor
+			
+			VAR RESULT = 
+			    IF(
+			        REAL < RANK3, 3, // Azul
+			
+			            IF( 
+			                REAL < RANK2, 2, // Verde
+			
+			                IF(
+			                    REAL < RANK1, 1, //Amarelo
+			
+			                        0 // Vermelho
+			                )
+			            )
+			    )
+			RETURN
+			    RESULT
+			```
+		formatString: 0
+		lineageTag: 2dd56807-972d-4269-b2cf-a044f7e26e36
+
+	measure _m-CartaoValorEntre_A-&-B_Melhor = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM-VARIAVEIS-PCP-ACUMULADO
+			
+			VAR REAL = [_m-ValorAcumuladoVariavelPcp]
+			
+			    VAR RANK1_MIN = SUM(
+			        'AREAS-PRODUCAO'[Rank1_Number.1]
+			        )
+			
+			    VAR RANK2_MIN = SUM(
+			        'AREAS-PRODUCAO'[Rank2_Number.1]
+			        )
+			
+			    VAR RANK3_MIN = SUM(
+			        'AREAS-PRODUCAO'[Rank3_Number.1]
+			        )
+			
+			
+			    VAR RANK1_MAX = SUM(
+			        'AREAS-PRODUCAO'[Rank1_Number.2]
+			        )
+			
+			    VAR RANK2_MAX = SUM(
+			        'AREAS-PRODUCAO'[Rank2_Number.2]
+			        )
+			
+			    VAR RANK3_MAX = SUM(
+			        'AREAS-PRODUCAO'[Rank3_Number.2]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador valor entre primeiro - segundo melhor
+			
+			VAR RESULT = 
+			    IF(
+			        AND(
+			            REAL >= RANK1_MIN, REAL <= RANK2_MIN
+			        ),
+			        1, // Amarelo
+			
+			        IF(
+			            AND(
+			                REAL >= RANK2_MIN, REAL <= RANK3_MIN
+			            ),
+			            2, // Verde
+			
+			            IF(
+			                AND(
+			                    REAL >= RANK3_MIN, REAL <= RANK3_MAX
+			                ),
+			                3, // Azul
+			                    0 // Vermelho
+			            )
+			        )
+			    )
+			                    
+			RETURN
+			    RESULT
+			```
+		formatString: 0
+		lineageTag: 76ceab88-7888-4632-8778-56c25e503dfe
+
+	measure _m-R$MaiorMelhorPcpAcumulado = ```
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelPcp]
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        SUM('AREAS-PRODUCAO'[R$_RANK_3]),  
+			        VAR CARTAO = [_m-CartaoMaiorMelhor]
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou abaixo 
+			                0,             // Retorna 0
+			                SWITCH(
+			                    CARTAO,
+			                    2, SUM('AREAS-PRODUCAO'[R$_RANK_2]),  // Rank 2
+			                    3, SUM('AREAS-PRODUCAO'[R$_RANK_3]),  // Rank 3
+			                    0  
+			                )
+			            )
+			    )
+			```
+		formatString: "R$"#,0.00;-"R$"#,0.00;"R$"#,0.00
+		lineageTag: 3ac5daa9-bb38-47a4-950f-3f41f0081664
+
+		annotation PBI_FormatHint = {"currencyCulture":"es-BR"}
+
+	measure _m-R$MenorMelhorPcpAcumulado =
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelPcp]
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        SUM('AREAS-PRODUCAO'[R$_RANK_3]),
+			        VAR CARTAO = [_m-CartaoMenorMelhor]
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou menor (abaixo do Rank 1), retorna 0
+			                0,
+			                SWITCH(
+			                    CARTAO,
+			                    3, SUM('AREAS-PRODUCAO'[R$_RANK_3]),
+			                    2, SUM('AREAS-PRODUCAO'[R$_RANK_2]),
+			                    SUM('AREAS-PRODUCAO'[R$_RANK_3])  // Padrão (Rank 3 ou outro)
+			                )
+			            )
+			    )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 9ff053b2-58e4-4bda-bb97-9b863d063c24
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$ValorEntre_A_&_B_PcpAcumulado =
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelPcp]
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        0,  // Se PONTOS = 0, retorna 0 (não pontuou)
+			        VAR CARTAO = [_m-CartaoValorEntre_A-&-B_Melhor]  // Classificação do cartão (2 ou 3)
+			        RETURN
+			            SWITCH(
+			                CARTAO,
+			                2, SUM('AREAS-PRODUCAO'[R$_RANK_2]),  // Rank 2 (valor fixo)
+			                3, SUM('AREAS-PRODUCAO'[R$_RANK_3]),  // Rank 3 (valor fixo)
+			                0  // Fallback para outros valores
+			            )
+			    )
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 547b325c-ae79-4d06-b67c-9ea0fd902252
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-SacasAcucarTonCana =
+			
+			var sacas = (CALCULATE( 'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],'PCP-ACUMULADO'[VAR_CODIGO]= "PRODACUTON")*1000/50)
+			var  canamoida = CALCULATE( 'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],'PCP-ACUMULADO'[VAR_CODIGO]= "0CANAMOIDA")
+			
+			var real = sacas /canamoida
+			
+			return
+			real
+		lineageTag: b2acbcc6-4a57-4e7d-a629-45988b730a7f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-CartaoMaiorMelhorSacasAcucar = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM ACUMULADO
+			VAR sacas = 
+			    CALCULATE(
+			        'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "PRODACUTON"
+			    ) * 1000 / 50
+			
+			VAR cana_moida = 
+			    CALCULATE(
+			        'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "0CANAMOIDA"
+			    )
+			
+			VAR real = sacas / cana_moida
+			VAR rank1 = SUM('AREAS-PRODUCAO'[Rank1_Number.1])
+			VAR rank2 = SUM('AREAS-PRODUCAO'[Rank2_Number.1])
+			VAR rank3 = SUM('AREAS-PRODUCAO'[Rank3_Number.1])
+			
+			// Para indicador MAIOR MELHOR com ajuste de cores
+			VAR result = 
+			    IF(
+			        real <= rank1, 0,  // Vermelho (≤ Rank1)
+			        IF(
+			            real <= rank2, 1,  // Amarelo (≤ Rank2)
+			            IF(
+			                real <= rank3, 2,  // Verde (≤ Rank3)
+			                3  // Azul (> Rank3 - melhor desempenho)
+			            )
+			        )
+			    )
+			
+			RETURN
+			    result
+			```
+		formatString: 0
+		lineageTag: d5b28437-8fab-4e53-af0e-597a5f4321c8
+
+	measure _m-R$MaiorMelhorSacasAcucarTonCana = ```
+			
+			VAR PONTOS = [_m-SacasAcucarTonCana]
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        SUM('AREAS-PRODUCAO'[R$_RANK_3]),  
+			        VAR CARTAO = [_m-CartaoMaiorMelhorSacasAcucar]
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou abaixo 
+			                0,             // Retorna 0
+			                SWITCH(
+			                    CARTAO,
+			                    2, SUM('AREAS-PRODUCAO'[R$_RANK_2]),  // Rank 2
+			                    3, SUM('AREAS-PRODUCAO'[R$_RANK_3]),  // Rank 3
+			                    0  
+			                )
+			            )
+			    )
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: f2fa68c3-918d-40f5-a6b7-84384a216468
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$MaiorMelhorPcpAreasApoio = ```
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelPcp]
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        SUM('AREAS-APOIO'[Valor_rank3]),  
+			        VAR CARTAO = [_m-CartaoMaiorMelhorAreasApoio]
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou abaixo 
+			                0,             // Retorna 0
+			                SWITCH(
+			                    CARTAO,
+			                    2, SUM('AREAS-APOIO'[Valor_rank2]),  // Rank 2
+			                    3, SUM('AREAS-APOIO'[Valor_rank3]),  // Rank 3
+			                    0  
+			                )
+			            )
+			    )
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 7e592e3d-64ce-4b29-ad3a-7bf45876693c
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-CartaoMenorMelhorAreasApoio = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM-VARIAVEIS-PCP-ACUMULADO para Áreas De Apoio
+			
+			VAR REAL = [_m-ValorAcumuladoVariavelPcp]
+			
+			    VAR RANK1 = 
+			        SUM(
+			            'AREAS-APOIO'[RANK1]
+			        )
+			
+			    VAR RANK2 = 
+			        SUM(
+			            'AREAS-APOIO'[Rank2_numero.1]
+			        )
+			
+			    VAR RANK3 = 
+			        SUM(
+			            'AREAS-APOIO'[RANK3 _numero.1]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador menor melhor
+			
+			VAR RESULT = 
+			    IF(
+			        REAL < RANK3, 3, // Azul
+			
+			            IF( 
+			                REAL <= RANK2, 2, // Verde
+			
+			                IF(
+			                    REAL <= RANK1, 1, //Amarelo
+			
+			                        0 // Vermelho
+			                )
+			            )
+			    )
+			RETURN
+			    RESULT
+			```
+		formatString: 0
+		lineageTag: 0841542c-0cd1-492d-ac1e-41a246f59060
+
+	measure _m-CartaoMaiorMelhorAreasApoio = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM-VARIAVEIS-PCP-ACUMULADO
+			
+			VAR REAL = [_m-ValorAcumuladoVariavelPcp]
+			
+			    VAR RANK1 = 
+			        SUM(
+			            'AREAS-APOIO'[RANK1]
+			        )
+			
+			    VAR RANK2 = 
+			        SUM(
+			            'AREAS-APOIO'[Rank2_numero.1]
+			        )
+			
+			    VAR RANK3 = 
+			        SUM(
+			            'AREAS-APOIO'[RANK3 _numero.1]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador maior melhor
+			
+			VAR RESULT = 
+			    IF(
+			        REAL < RANK1, 0, // Vermelho
+			
+			            IF( 
+			                REAL <= RANK2, 1, // Amarelo
+			
+			                IF(
+			                    REAL <= RANK3, 2, // Verde
+			
+			                        3 // Azul
+			                )
+			            )
+			    )
+			
+			RETURN
+			
+			    RESULT
+			```
+		formatString: 0
+		lineageTag: 97def41e-7c74-4f53-91bb-b48fa90aee11
+
+	measure _m-R$MenorMelhorPcpAreasApoio = ```
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelPcp]
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        SUM('AREAS-APOIO'[Valor_rank3]), 
+			        VAR CARTAO = [_m-CartaoMenorMelhorAreasApoio]
+			        RETURN
+			            IF(
+			                CARTAO <= 1,  // Se for Rank 1 ou menor (abaixo do Rank 1), retorna 0
+			                0,
+			                SWITCH(
+			                    CARTAO,
+			                    3, SUM('AREAS-APOIO'[Valor_rank3]), 
+			                    2, SUM('AREAS-APOIO'[Valor_rank2]),
+			                    SUM('AREAS-APOIO'[Valor_rank3])  // Padrão (Rank 3 ou outro)
+			                )
+			            )
+			    )
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 09252792-0d2a-4ebb-bb91-9b814908e535
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-CodCorCartaoApoioAproveitamentoIndustrial = ```
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Aproveitamento Industrial ACUMULADO
+			var real = 
+			'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp]
+			
+			var rank1 = 
+			    CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-APOIO'[PILAR] = "Aproveitamento de Tempo Industrial"
+			    )
+			
+			    var rank2 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[Rank2_numero.1]),
+			            'AREAS-APOIO'[PILAR] = "Aproveitamento de Tempo Industrial"
+			        )
+			
+			        var rank3 = 
+			            CALCULATE(
+			                SUM('AREAS-APOIO'[RANK3 _numero.1]),
+			                'AREAS-APOIO'[PILAR] = "Aproveitamento de Tempo Industrial"
+			            )
+			
+			// Para indicador maior melhor
+			
+			VAR RESULT = 
+			    IF(
+			        REAL < RANK1, 0, // Vermelho
+			
+			            IF( 
+			                REAL <= RANK2, 1, // Amarelo
+			
+			                IF(
+			                    REAL <= RANK3, 2, // Verde
+			
+			                        3 // Azul
+			                )
+			            )
+			    )
+			RETURN
+			    RESULT
+			```
+		formatString: 0
+		lineageTag: e0e7fa6b-7772-43bd-9b29-b4ec4a16891a
+
+	column EMPRESA
+		dataType: string
+		lineageTag: 29ab3946-e379-4d14-ba69-e479125c784f
+		summarizeBy: none
+		sourceColumn: EMPRESA
+
+		annotation SummarizationSetBy = Automatic
+
+	column BDATA
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: a91ae07f-3a59-41a6-8952-86f6528ee2ed
+		summarizeBy: none
+		sourceColumn: BDATA
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column VAR_CODIGO
+		dataType: string
+		lineageTag: a46c615a-f8f3-405c-9369-8cccae6fa28e
+		summarizeBy: none
+		sourceColumn: VAR_CODIGO
+
+		annotation SummarizationSetBy = Automatic
+
+	column VAR_DESCRI
+		dataType: string
+		lineageTag: 1b5df162-2c68-47ee-86dc-f5a82a39ee5f
+		summarizeBy: none
+		sourceColumn: VAR_DESCRI
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAN_VALOR_A
+		dataType: double
+		lineageTag: a0d926e1-5765-44c4-b1a7-af1ab4ebed29
+		summarizeBy: sum
+		sourceColumn: LAN_VALOR_A
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition PCP-ACUMULADO = m
+		mode: import
+		queryGroup: 'PILAR IPM'
+		source =
+				let
+				    Fonte = Oracle.Database("ppim", [HierarchicalNavigation=true, Query="--destravar períodos de datas durante inicio e fim de safra#(lf)-- script acumulado UVT#(lf)select #(lf)    decode(emp_codemp, '001','UVT', '002','UVP', '003','UCP') empresa,#(lf)    bdata,#(lf)    var_codigo,#(lf)    var_descri,#(lf)    lan_valor_a#(lf)    #(lf)from pims_pi.proboletim#(lf)#(lf)where emp_codemp in ('001')#(lf)    --and bdata = to_date('11/12/2025', 'dd/mm/yyyy')           --UTILIZAR FECHAMENTO SAFRA#(lf)    and bdata = (select MAX(BDATA) from pims_pi.proboletim) --UTILIZAR DURANTE A SAFRA#(lf)    and var_codigo in ('EXTRCANART',#(lf)                       '0UMID_DESF',#(lf)                       'CONSELEARA',#(lf)                       'RECUPERFAB',#(lf)                       '0PPERDSPRE',#(lf)                       '00000EFCTC',   #(lf)                       'CRISMASSAA',#(lf)                       '00RENDDEST',#(lf)                       'PPERDMULEV',#(lf)                       '0MEDPOLTOR',#(lf)                       '00MEDSICAL',#(lf)                       'PRODACUTON',#(lf)                       '0CANAMOIDA',#(lf)                       '0DEVPROCAC',#(lf)                       '0DEVPROCET',#(lf)                       '00APROVIND',#(lf)                       '00INTERLAB',#(lf)                       '000RENDFER',#(lf)                       '0AGBRUTATC'#(lf)                      )#(lf)group by#(lf)    emp_codemp,#(lf)    bdata,#(lf)    var_codigo,#(lf)    var_descri,#(lf)    lan_valor,#(lf)    lan_valor_s,#(lf)    lan_valor_m,#(lf)    lan_valor_a#(lf)    #(lf)union all#(lf)#(lf)-- script acumulado UVP#(lf)select #(lf)    decode(emp_codemp, '001','UVT', '002','UVP', '003','UCP') empresa,#(lf)    bdata,#(lf)    var_codigo,#(lf)    var_descri,#(lf)    lan_valor_a#(lf)    #(lf)from pims_pi.proboletim#(lf)#(lf)where emp_codemp in ('002')#(lf)    --and bdata = to_date('21/12/2025', 'dd/mm/yyyy')       --UTILIZAR FECHAMENTO SAFRA#(lf)    and bdata = (select MAX(BDATA) from pims_pi.proboletim) --UTILIZAR DURANTE A SAFRA#(lf)    and var_codigo in ('EXTRCANART',#(lf)                       '0UMID_DESF',#(lf)                       'CONSELEARA',#(lf)                       'RECUPERFAB',#(lf)                       '0PPERDSPRE',#(lf)                       '00000EFCTC',   #(lf)                       'CRISMASSAA',#(lf)                       '00RENDDEST',#(lf)                       'PPERDMULEV',#(lf)                       '0MEDPOLTOR',#(lf)                       '00MEDSICAL',#(lf)                       'PRODACUTON',#(lf)                       '0CANAMOIDA',#(lf)                       '0DEVPROCAC',#(lf)                       '0DEVPROCET',#(lf)                       '00APROVIND',#(lf)                       '00INTERLAB',#(lf)                       '0AGBRUTATC'#(lf)                      )#(lf)group by#(lf)    emp_codemp,#(lf)    bdata,#(lf)    var_codigo,#(lf)    var_descri,#(lf)    lan_valor,#(lf)    lan_valor_s,#(lf)    lan_valor_m,#(lf)    lan_valor_a#(lf)    #(lf)union all#(lf)#(lf)-- script acumulado UVT#(lf)select #(lf)    decode(emp_codemp, '001','UVT', '002','UVP', '003','UCP') empresa,#(lf)    bdata,#(lf)    var_codigo,#(lf)    var_descri,#(lf)    lan_valor_a#(lf)    #(lf)from pims_pi.proboletim#(lf)#(lf)where emp_codemp in ('003')#(lf)    --and bdata = to_date('15/12/2025', 'dd/mm/yyyy')           --UTILIZAR FECHAMENTO SAFRA#(lf)    and bdata = (select MAX(BDATA) from pims_pi.proboletim) --UTILIZAR DURANTE A SAFRA#(lf)    and var_codigo in ('EXTRCANART',#(lf)                       '0UMID_DESF',#(lf)                       'CONSELEARA',#(lf)                       'RECUPERFAB',#(lf)                       '0PPERDSPRE',#(lf)                       '00000EFCTC',   #(lf)                       'CRISMASSAA',#(lf)                       '00RENDDEST',#(lf)                       'PPERDMULEV',#(lf)                       '0MEDPOLTOR',#(lf)                       '00MEDSICAL',#(lf)                       'PRODACUTON',#(lf)                       '0CANAMOIDA',#(lf)                       '0DEVPROCAC',#(lf)                       '0DEVPROCET',#(lf)                       '00APROVIND',#(lf)                       '00INTERLAB',#(lf)                       '0AGBRUTATC'#(lf)                      )#(lf)group by#(lf)    emp_codemp,#(lf)    bdata,#(lf)    var_codigo,#(lf)    var_descri,#(lf)    lan_valor,#(lf)    lan_valor_s,#(lf)    lan_valor_m,#(lf)    lan_valor_a"]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"BDATA", type date}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,1892 @@
+table AREAS-APOIO
+	lineageTag: e1462e6f-5198-478c-bf89-19bb52156658
+
+	measure _m-R$MaiorMelhorAreasApoio =
+			
+			VAR PONTOS = SUM('AREAS-APOIO'[RESULTADO])
+			
+			VAR TOTPONTOS = CALCULATE(
+			    SUM('AREAS-APOIO'[RESULTADO])
+			    // ALL(FAT_AREAS_APOIO[PILAR])
+			)
+			
+			// Verifica se TOTPONTOS é zero para evitar divisão por zero
+			VAR VLRANK2 = IF(TOTPONTOS = 0, 0, (SUM('AREAS-APOIO'[Valor_rank2]) / TOTPONTOS) * PONTOS)
+			VAR VLRANK3 = IF(TOTPONTOS = 0, 0, (SUM('AREAS-APOIO'[Valor_rank3]) / TOTPONTOS) * PONTOS)
+			
+			VAR COND = SWITCH(
+			    TRUE(),
+			    [_m-MaiorMelhorAreasApoio] = 2, VLRANK2,
+			    [_m-MaiorMelhorAreasApoio] = 3, VLRANK3
+			)
+			
+			RETURN
+			COND + 0
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: af2c3622-1f6e-4891-ab85-4b94232b6194
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-MaiorMelhorAreasApoio = ```
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Resultado Acumulado
+			var real = SUM(
+			    'AREAS-APOIO'[RESULTADO]
+			    )
+			
+			var rank1 = SUM(
+			    'AREAS-APOIO'[RANK1]
+			    )
+			
+			var rank2 = SUM(
+			    'AREAS-APOIO'[Rank2_numero.1]
+			    )
+			
+			var rank3 = SUM(
+			    'AREAS-APOIO'[RANK3 _numero.1]
+			    )
+			
+			//para indicador maior melhor
+			var result = 
+			    IF(real < rank1, 0, //vermelho
+			                IF(real < rank2, 1, //amarelo
+			                    IF(real < rank3, 2, //verde
+			                                        3  //azul
+			                        )
+			                    )
+			        )
+			
+			return
+			
+			result
+			
+			
+			
+			```
+		formatString: 0
+		lineageTag: f07fbf1c-91c2-4c35-bab5-58ca9fe29d2a
+
+	measure _m-MenorMelhorAreasApoio =
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Resultado Acumulado
+			var real = SUM(
+			    'AREAS-APOIO'[RESULTADO]
+			    )
+			
+			var rank1 = SUM(
+			    'AREAS-APOIO'[RANK1]
+			    )
+			
+			var rank2 = SUM(
+			    'AREAS-APOIO'[Rank2_numero.1]
+			    )
+			
+			var rank3 = SUM(
+			    'AREAS-APOIO'[RANK3 _numero.1]
+			    )
+			
+			//para indicador menor melhor
+			var result = IF(real <= rank3, 3, //azul
+			             IF(real <= rank2, 2, //verde
+			             IF(real <= rank1, 1, //amarelo
+			                               0  //vermelho
+			                )))
+			
+			return
+			result
+		formatString: 0
+		lineageTag: 3f1a8ea4-cfa1-4db1-b284-48d5e9ec32b9
+
+	measure _m-R$MenorMelhorAreasApoio = ```
+			
+			VAR PONTOS = SUM('AREAS-APOIO'[RESULTADO])
+			
+			VAR TOTPONTOS = CALCULATE(SUM('AREAS-APOIO'[RESULTADO]))
+			
+			VAR VLRANK2 = SUM('AREAS-APOIO'[Valor_rank2])  
+			
+			VAR VLRANK3 = SUM('AREAS-APOIO'[Valor_rank3])  
+			
+			VAR RANK3_BRUTO = SUM('AREAS-APOIO'[Valor_rank3])
+			
+			VAR COND = 
+			    IF(
+			        PONTOS = 0,
+			        RANK3_BRUTO,  // Retorna valor bruto do Rank3 quando PONTOS = 0
+			        SWITCH(
+			            TRUE(),
+			            [_m-MenorMelhorAreasApoio] = 2, VLRANK2,
+			            [_m-MenorMelhorAreasApoio] = 3, VLRANK3,
+			            0  // Valor padrão
+			        )
+			    )
+			
+			RETURN
+			    COND
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: ca2981c8-1879-4b3d-9ef9-82b79175231a
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$TotIPMAreasDeApoio = ```
+			
+			    VAR Indicador02 = 
+			        CALCULATE(
+			            [_m-R$MaiorMelhorAreasApoio],
+			            'AREAS-APOIO'[PILAR] = "IPM - Indicador 02"
+			        )
+			    //--------------------------------//
+			    VAR Indicador03 = 
+			        CALCULATE(
+			            [_m-R$MaiorMelhorAreasApoio],
+			            'AREAS-APOIO'[PILAR] = "IPM - Indicador 03"
+			        )
+			    //--------------------------------//
+			    VAR Indicador04 = 
+			        CALCULATE(
+			            [_m-R$MaiorMelhorAreasApoio],
+			            'AREAS-APOIO'[PILAR] = "IPM - Indicador 04"
+			        )
+			    //--------------------------------//
+			    VAR Indicador05 = 
+			        CALCULATE(
+			            [_m-R$MaiorMelhorAreasApoio],
+			            'AREAS-APOIO'[PILAR] = "IPM - Indicador 05"
+			        )
+			    //--------------------------------//
+			    VAR Indicador06 = 
+			        CALCULATE(
+			            [_m-R$MaiorMelhorAreasApoio],
+			            'AREAS-APOIO'[PILAR] = "IPM - Indicador 06"
+			        )
+			    //--------------------------------//
+			    VAR Indicador07 = 
+			        CALCULATE(
+			            [_m-R$MaiorMelhorAreasApoio],
+			            'AREAS-APOIO'[PILAR] = "IPM - Indicador 07"
+			        )
+			    //--------------------------------//
+			    RETURN
+			        Indicador02 + 
+			        Indicador03 + 
+			        Indicador04 + 
+			        Indicador05 + 
+			        Indicador06 + 
+			        Indicador07
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: f1d93603-ef0f-4800-92dc-c646b360db0f
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$TotGPEApoio = ```
+			
+			VAR Dss = 
+			    CALCULATE(
+			        [_m-R$MaiorMelhorAreasApoio],
+			        'AREAS-APOIO'[PILAR] = "GPE - DSS"
+			    )
+			VAR Reducao_Esquecimento = 
+			    CALCULATE(
+			        [_m-R$ReducaoEsquecimentoRegistroPontoAreasApoio],
+			        'AREAS-APOIO'[PILAR] = "GPE - Marcação Ponto"
+			    )
+			RETURN
+			    Dss + Reducao_Esquecimento
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 8215d0f1-adf7-4691-8ca1-6ae788a23a62
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-PontosGpeApoio =
+			
+			CALCULATE(
+			    SUM('AREAS-APOIO'[PONTOS]),
+			    'AREAS-APOIO'[PILAR] = "GPE - Marcação Ponto")
+		lineageTag: 910baa28-709a-4beb-b57c-ba9e98ba7c13
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-R$AcumuladoTotalAreasApoio = ```
+			
+			
+			VAR CUSTOS = 
+			    CALCULATE(
+			        [_m-R$MenorMelhorAreasApoio],
+			        'AREAS-APOIO'[PILAR] = "DEEP DIVE"
+			    )
+			RETURN
+			    [_m-R$TotGPEApoio] +
+			    [_m-R$TotIPMAreasDeApoio] +    
+			    CUSTOS
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 96e25e44-f430-4665-95ed-00c754233831
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-DevolucaoEtanolAcucar = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado 
+			VAR PONTOS = [_m-ValorAcumuladoVariavelPcp]
+			
+			// Definindo limites dos ranks 
+			VAR rank1Min = 0
+			VAR rank2Min = 1
+			VAR rank3Min = 6
+			
+			VAR rank1Max = 0
+			VAR rank2Max = 5
+			VAR rank3Max = 7
+			
+			// Usando PONTOS como valor de entrada 
+			VAR safePontos = IF(ISBLANK(PONTOS) || ISERROR(PONTOS), BLANK(), PONTOS)
+			
+			// Para indicador ENTRE 
+			VAR result = 
+			    IF(
+			        safePontos = rank3Max, 0, // Vermelho (pior)
+			        IF(
+			            safePontos = rank3Min, 1, // Amarelo
+			            IF(
+			                AND(safePontos >= rank2Min, safePontos <= rank2Max), 2, // Verde
+			                IF(
+			                    AND(safePontos >= rank1Min, safePontos <= rank1Max), 3, // Azul (melhor)
+			                    BLANK() 
+			                )
+			            )
+			        )
+			    )
+			
+			RETURN
+			    result
+			```
+		formatString: 0
+		lineageTag: 82740f1c-7062-46c8-a055-b1c174bc22b4
+
+	measure _m-R$Devolucoes = ```
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelPcp]
+			VAR VLRANK2 = SUM('AREAS-APOIO'[Valor_rank2])
+			VAR VLRANK3 = SUM('AREAS-APOIO'[Valor_rank3])
+			VAR RANK2_NUMERO = SUM('AREAS-APOIO'[Rank2_numero.1])
+			VAR RANK3_NUMERO = SUM('AREAS-APOIO'[RANK3 _numero.1])
+			
+			RETURN 
+			    IF(
+			        PONTOS = 0, 
+			        VLRANK3,  // Quando PONTOS = 0, retorna VLRANK3
+			        // Quando PONTOS ≠ 0
+			        IF(
+			            [_m-DevolucaoEtanolAcucar] <= RANK2_NUMERO,
+			            VLRANK2,  // Retorna VLRANK2 se <= Rank2_numero.1
+			            IF(
+			                [_m-DevolucaoEtanolAcucar] <= RANK3_NUMERO,
+			                VLRANK3,  // Retorna VLRANK3 se <= Rank3_numero.1
+			                0   // Valor padrão se não atender às condições
+			            )
+			        )
+			    )
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 6bf05c3e-6736-452a-a43f-33a3b1bfd0de
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TotalIpm03 = ```
+			
+			
+			// -- EXTRAÇÃO --
+			
+			VAR UMIDADE =
+			    VAR ValorUmidade = 
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'AREAS-PRODUCAO'[Indicador] = "Umidade do Bagaço",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "0UMID_DESF",
+			            'AREAS-PRODUCAO'[Setor] = "EXT - EXTRAÇÃO"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Rank1_Number.1]),  
+			            'AREAS-PRODUCAO'[Indicador] = "Umidade do Bagaço",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "EXT - EXTRAÇÃO"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorUmidade),
+			            IF(
+			                ValorUmidade <= Rank1,
+			                1,
+			                0
+			            ),
+			            0  // Retorna 0 se ValorUmidade for BLANK
+			        )
+			
+			// -- UTILIDADES --
+			VAR CTRL_SILICA =
+			    VAR ValorSilica = 
+			        CALCULATE(
+			            'PCP-PROLANCA'[_m-ValorAcumuladoVariavelProlancaXXX],
+			            'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026",
+			            'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			            'PCP-PROLANCA'[VAR_CODIGO] = "00MEDVPSAT",
+			            'AREAS-PRODUCAO'[Indicador] = "Controle de Sílica (Vapor Saturado)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "UTI - UTILIDADES"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Controle de Sílica (Vapor Saturado)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "UTI - UTILIDADES"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorSilica),
+			            IF(
+			                ValorSilica <= Rank1,
+			                1,
+			                0
+			            ),
+			            0  // Retorna 0 se ValorSilica for BLANK
+			        )
+			   
+			   // -- FABRICA DE AÇUCAR --
+			VAR PERDAS_MULTIJATO =
+			    VAR ValorPerdas = 
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'AREAS-PRODUCAO'[Indicador] = "Perdas no Multijato",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "PPERDMULEV",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "FAA - FABRICA DE ACUCAR"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Perdas no Multijato",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "FAA - FABRICA DE ACUCAR"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorPerdas),
+			            IF(ValorPerdas <= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- TRATAMENTO DE CALDO & EVAPORAÇÃO --
+			VAR CALDO_DOSADO_PH_TRC =
+			    VAR ValorPH = 
+			        CALCULATE(
+			            'PCP-PROLANCA'[_m-ValorAcumuladoVariavelProlancaXXX],
+			            'PCP-PROLANCA'[VAR_CODIGO] = "00DOSADOPH",
+			            'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			            'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Controle de p.H (Caldo Dosado)",
+			            'AREAS-PRODUCAO'[Setor] = "TRC - TRATAMENTO DE CALDO"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Controle de p.H (Caldo Dosado)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "TRC - TRATAMENTO DE CALDO"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorPH),
+			            IF(ValorPH <= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- FERMENTAÇÃO & DESTILARIA --
+			VAR CONTROLE_PH_FAE =
+			    VAR ValorPH = 
+			        CALCULATE(
+			            'PCP-PROLANCA'[_m-ValorAcumuladoVariavelProlancaXXX],
+			            'PCP-PROLANCA'[VAR_CODIGO] = "0PRODALCPH",
+			            'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			            'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Controle de pH (Etanol Hidratado)",
+			            'AREAS-PRODUCAO'[Setor] = "FAE - FABRICA DE ETANOL"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Controle de pH (Etanol Hidratado)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "FAE - FABRICA DE ETANOL"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorPH),
+			            IF(ValorPH <= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- MANUTENÇÃO MECÂNICA --
+			VAR ADERENCIA_MAM =
+			    VAR ValorAderencia = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
+			            'AREAS-PRODUCAO'[Setor] = "MAM - MAN. MECANICA"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MAM - MAN. MECANICA"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorAderencia),
+			            IF(ValorAderencia >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- MANUTENÇÃO ELÉTRICA, INSTRUMENTAÇÃO & CASA DE FORÇA --
+			VAR ADERENCIA_MEI =
+			    VAR ValorAderencia = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
+			            'AREAS-PRODUCAO'[Setor] = "MEI - MAN. ELETRICA E INSTRUMENTACAO"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MEI - MAN. ELETRICA E INSTRUMENTACAO"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorAderencia),
+			            IF(ValorAderencia >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- MANUTENÇÃO CIVIL --
+			VAR ADERENCIA_MAC =
+			    VAR ValorAderencia = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
+			            'AREAS-PRODUCAO'[Setor] = "MAC - MAN. CIVIL"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MAC - MAN. CIVIL"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorAderencia),
+			            IF(ValorAderencia >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- MANUTENÇÃO CALDEIRARIA --
+			VAR ADERENCIA_MCA =
+			    VAR ValorAderencia = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
+			            'AREAS-PRODUCAO'[Setor] = "MCA - MAN. CALDEIRARIA"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MCA - MAN. CALDEIRARIA"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorAderencia),
+			            IF(ValorAderencia >= Rank1, 1, 0),
+			            0
+			        )
+			RETURN
+			    (UMIDADE + CTRL_SILICA + PERDAS_MULTIJATO + CONTROLE_PH_FAE + 
+			     CALDO_DOSADO_PH_TRC + ADERENCIA_MAM + ADERENCIA_MEI + ADERENCIA_MAC + ADERENCIA_MCA) / 9 * 100
+			```
+		formatString: 0
+		lineageTag: daa64284-6595-461b-988b-8fc0fc4e080d
+
+	measure _m-TotalIpm04 = ```
+			
+			// -- EXTRAÇÃO --
+			VAR CONSUMO_CHAPISCO_ATR =
+			    VAR ValorChapisco = 
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'AREAS-PRODUCAO'[Indicador] = "Consumo de Chapisco",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "CONSELEARA",
+			            'AREAS-PRODUCAO'[Setor] = "EXT - EXTRAÇÃO"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Consumo de Chapisco",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "EXT - EXTRAÇÃO"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorChapisco),
+			            IF(ValorChapisco >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- UTILIDADES --
+			VAR CONTROLE_PH =
+			    VAR ValorPH = 
+			        CALCULATE(
+			            'PCP-PROLANCA'[_m-ValorAcumuladoVariavelProlancaXXX],
+			            'PCP-PROLANCA'[VAR_CODIGO] = "0000PH_ALI",
+			            'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Controle pH (Alimentação Caldeira)",
+			            'AREAS-PRODUCAO'[Setor] = "UTI - UTILIDADES"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Controle pH (Alimentação Caldeira)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "UTI - UTILIDADES"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorPH),
+			            IF(ValorPH >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- FABRICA DE AÇUCAR --
+			VAR COR_ACUCAR_FABRICA =
+			    VAR ValorCor = 
+			        CALCULATE(
+			            'PCP-PROLANCA'[_m-ValorAcumuladoVariavelProlancaXXX],
+			            'PCP-PROLANCA'[VAR_CODIGO] = "0CORACUCAR",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Controle pH (Cor do Açúcar)",
+			            'AREAS-PRODUCAO'[Setor] = "FAA - FABRICA DE ACUCAR"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Controle pH (Cor do Açúcar)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "FAA - FABRICA DE ACUCAR"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorCor),
+			            IF(ValorCor >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- TRATAMENTO DE CALDO --
+			VAR POL_DA_TORTA_TRC =
+			    VAR ValorPol = 
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "0MEDPOLTOR",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Pol da Torta",
+			            'AREAS-PRODUCAO'[Setor] = "TRC - TRATAMENTO DE CALDO"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Pol da Torta",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "TRC - TRATAMENTO DE CALDO"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorPol),
+			            IF(ValorPol <= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- FABRICA DE ETANOL --
+			VAR CONSUMO_ACIDO_FAE =
+			    VAR ValorAcido = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Consumo de Ácido Sulfúrico",
+			            'AREAS-PRODUCAO'[Setor] = "FAE - FABRICA DE ETANOL"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Consumo de Ácido Sulfúrico",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "FAE - FABRICA DE ETANOL"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorAcido),
+			            IF(ValorAcido <= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- MANUTENÇÕES (todas com mesma estrutura) --
+			VAR HRS_REALIZADAS_CORRETIVAS_MAM =
+			    VAR ValorHoras = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Setor] = "MAM - MAN. MECANICA"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MAM - MAN. MECANICA"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorHoras),
+			            IF(ValorHoras >= Rank1, 1, 0),  // Note que aqui é >= (diferente dos outros que são <=)
+			            0
+			        )
+			
+			VAR HRS_REALIZADAS_CORRETIVAS_MEI =
+			    VAR ValorHoras = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Setor] = "MEI - MAN. ELETRICA E INSTRUMENTACAO"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MEI - MAN. ELETRICA E INSTRUMENTACAO"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorHoras),
+			            IF(ValorHoras >= Rank1, 1, 0),
+			            0
+			        )
+			
+			VAR HRS_REALIZADAS_CORRETIVAS_MAC =
+			    VAR ValorHoras = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Setor] = "MAC - MAN. CIVIL"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MAC - MAN. CIVIL"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorHoras),
+			            IF(ValorHoras >= Rank1, 1, 0),
+			            0
+			        )
+			
+			VAR HRS_REALIZADAS_CORRETIVAS_MCA =
+			    VAR ValorHoras = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Setor] = "MCA - MAN. CALDEIRARIA"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM", 
+			            'AREAS-PRODUCAO'[Setor] = "MCA - MAN. CALDEIRARIA"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorHoras),
+			            IF(ValorHoras >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// Cálculo da média final
+			VAR TOTAL_INDICATORS = 9
+			VAR SUM_INDICATORS = 
+			    CONSUMO_CHAPISCO_ATR + CONTROLE_PH + COR_ACUCAR_FABRICA + 
+			    POL_DA_TORTA_TRC + CONSUMO_ACIDO_FAE + 
+			    HRS_REALIZADAS_CORRETIVAS_MAM + HRS_REALIZADAS_CORRETIVAS_MEI + 
+			    HRS_REALIZADAS_CORRETIVAS_MAC + HRS_REALIZADAS_CORRETIVAS_MCA
+			
+			RETURN
+			    DIVIDE(SUM_INDICATORS, TOTAL_INDICATORS, 0) * 100
+			```
+		lineageTag: 42b1a9ee-cae2-43dc-8079-4f9c3418a018
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-TotalIpm05 =
+			
+			
+			// -- MANUTENÇÃO MECÂNICA --
+			VAR ADERENCIA_MAM =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Horas Produtivas  (Apontamento de Mão de Obra)",
+			            'AREAS-PRODUCAO'[Setor] = "MAM - MAN. MECANICA"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO ELÉTRICA, INSTRUMENTAÇÃO & CASA DE FORÇA --
+			VAR ADERENCIA_MEI =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Horas Produtivas  (Apontamento de Mão de Obra)",
+			            'AREAS-PRODUCAO'[Setor] = "MEI - MAN. ELETRICA E INSTRUMENTACAO"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO CIVIL --
+			VAR ADERENCIA_MAC =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Horas Produtivas  (Apontamento de Mão de Obra)",
+			            'AREAS-PRODUCAO'[Setor] = "MAC - MAN. CIVIL"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO CALDEIRARIA --
+			VAR ADERENCIA_MCA =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Horas Produtivas  (Apontamento de Mão de Obra)",
+			            'AREAS-PRODUCAO'[Setor] = "MCA - MAN. CALDEIRARIA"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			RETURN
+			    ( ADERENCIA_MAM + ADERENCIA_MEI + ADERENCIA_MAC + ADERENCIA_MCA) / 4 * 100
+		lineageTag: 94489089-20d0-457c-bfe2-02643892d02d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-MaiorMelhorIpm03 = ```
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Resultado Acumulado
+			var real = [_m-TotalIpm03]
+			
+			var rank1 = SUM(
+			    'AREAS-APOIO'[RANK1]
+			    )
+			
+			var rank2 = SUM(
+			    'AREAS-APOIO'[Rank2_numero.1]
+			    )
+			
+			var rank3 = SUM(
+			    'AREAS-APOIO'[RANK3 _numero.1]
+			    )
+			
+			//para indicador maior melhor
+			var result = 
+			    IF(real < rank1, 0, //vermelho
+			                IF(real < rank2, 1, //amarelo
+			                    IF(real < rank3, 2, //verde
+			                                        3  //azul
+			                        )
+			                    )
+			        )
+			
+			return
+			
+			result
+			
+			
+			
+			```
+		formatString: 0
+		lineageTag: 30724358-ff36-4aca-ae7f-6864a7197490
+
+	measure _m-MaiorMelhorIpm04 = ```
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Resultado Acumulado
+			var real = [_m-TotalIpm04]
+			
+			var rank1 = SUM(
+			    'AREAS-APOIO'[RANK1]
+			    )
+			
+			var rank2 = SUM(
+			    'AREAS-APOIO'[Rank2_numero.1]
+			    )
+			
+			var rank3 = SUM(
+			    'AREAS-APOIO'[RANK3 _numero.1]
+			    )
+			
+			//para indicador maior melhor
+			var result = 
+			    IF(real < rank1, 0, //vermelho
+			                IF(real < rank2, 1, //amarelo
+			                    IF(real < rank3, 2, //verde
+			                                        3  //azul
+			                        )
+			                    )
+			        )
+			
+			return
+			
+			result
+			
+			
+			
+			```
+		formatString: 0
+		lineageTag: 90dfea67-57ac-4f18-8cd5-1827b71e269c
+
+	measure _m-MaiorMelhorIpm05 = ```
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Resultado Acumulado
+			var real = [_m-TotalIpm05]
+			
+			var rank1 = SUM(
+			    'AREAS-APOIO'[RANK1]
+			    )
+			
+			var rank2 = SUM(
+			    'AREAS-APOIO'[Rank2_numero.1]
+			    )
+			
+			var rank3 = SUM(
+			    'AREAS-APOIO'[RANK3 _numero.1]
+			    )
+			
+			//para indicador maior melhor
+			var result = 
+			    IF(real < rank1, 0, //vermelho
+			                IF(real < rank2, 1, //amarelo
+			                    IF(real < rank3, 2, //verde
+			                                        3  //azul
+			                        )
+			                    )
+			        )
+			
+			return
+			
+			result
+			
+			
+			
+			```
+		formatString: 0
+		lineageTag: 5e8d4081-502d-46e7-9d28-66f7833b6cdf
+
+	measure _m-R$MaiorMelhorIpm03 = ```
+			
+			VAR PONTOS = [_m-TotalIpm03]
+			
+			VAR TOTPONTOS = CALCULATE(
+			    [_m-TotalIpm03]
+			//    ALL(FAT_AREAS_APOIO[PILAR])
+			)
+			
+			VAR VLRANK2 = DIVIDE(SUM('AREAS-APOIO'[Valor_rank2]), TOTPONTOS, 0) * PONTOS
+			VAR VLRANK3 = DIVIDE(SUM('AREAS-APOIO'[Valor_rank3]), TOTPONTOS,0) * PONTOS
+			
+			VAR COND = SWITCH(
+			    TRUE(),
+			    [_m-MaiorMelhorIpm03] = 2, VLRANK2,
+			    [_m-MaiorMelhorIpm03] = 3, VLRANK3
+			)
+			
+			RETURN
+			COND + 0
+			
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: ae5253ad-3284-47bb-b77a-63265af0b719
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$MaiorMelhorIpm04 = ```
+			
+			VAR PONTOS = [_m-TotalIpm04]
+			
+			VAR TOTPONTOS = CALCULATE(
+			    [_m-TotalIpm04]
+			//    ALL(FAT_AREAS_APOIO[PILAR])
+			)
+			
+			VAR VLRANK2 = DIVIDE(SUM('AREAS-APOIO'[Valor_rank2]), TOTPONTOS, 0) * PONTOS
+			VAR VLRANK3 = DIVIDE(SUM('AREAS-APOIO'[Valor_rank3]), TOTPONTOS, 0) * PONTOS
+			
+			VAR COND = SWITCH(
+			    TRUE(),
+			    [_m-MaiorMelhorIpm04] = 2, VLRANK2,
+			    [_m-MaiorMelhorIpm04] = 3, VLRANK3
+			)
+			
+			RETURN
+			COND + 0
+			
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 3262ca6d-e0ac-4ef7-91fa-c95ee89320d6
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-R$MaiorMelhorIpm05 = ```
+			
+			VAR PONTOS = [_m-TotalIpm05]
+			
+			VAR TOTPONTOS = CALCULATE(
+			    [_m-TotalIpm05]
+			//    ALL(FAT_AREAS_APOIO[PILAR])
+			)
+			
+			VAR VLRANK2 = DIVIDE(SUM('AREAS-APOIO'[Valor_rank2]), TOTPONTOS, 0) * PONTOS
+			VAR VLRANK3 = DIVIDE(SUM('AREAS-APOIO'[Valor_rank3]), TOTPONTOS, 0) * PONTOS
+			
+			VAR COND = SWITCH(
+			    TRUE(),
+			    [_m-MaiorMelhorIpm05] = 2, VLRANK2,
+			    [_m-MaiorMelhorIpm05] = 3, VLRANK3
+			)
+			
+			RETURN
+			COND + 0
+			
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 62fd0574-b658-4dae-8ea8-6246134663f5
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TotalIpm02 = ```
+			
+			
+			// -- EXTRAÇÃO --
+			VAR EXTRACAO_ATR =
+			    IF(
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'AREAS-PRODUCAO'[Indicador] = "Extração ART",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "EXTRCANART",
+			            'AREAS-PRODUCAO'[Setor] = "EXT - EXTRAÇÃO"
+			        ) <= SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			        1,
+			        0
+			    )
+			
+			// -- UTILIDADES --
+			
+			VAR CONSUMO_H2O_BRUTA =
+			IF(
+			    CALCULATE(
+			        SUMX(FILTER('AREAS-PRODUCAO', 'AREAS-PRODUCAO'[Pilar] = "IPM"), 1), 
+			        'AREAS-PRODUCAO'[Indicador] = "Consumo de Água Bruta",
+			        'PCP-PROLANCA'[VAR_CODIGO]="0AGBRUTATC",
+			        'AREAS-PRODUCAO'[Setor] = "UTI - UTILIDADES"
+			    ) <= SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			    1,
+			    0
+			)
+			
+			// -- FABRICA DE AÇUCAR --
+			VAR RECUPERACAO_FABRICA =
+			    IF(
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'AREAS-PRODUCAO'[Indicador] = "Recuperação de Fábrica (SJM)",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "RECUPERFAB",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "FAA - FABRICA DE ACUCAR"
+			        ) >= SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			        1,
+			        0
+			    )
+			
+			// -- TRATAMENTO DE CALDO & EVAPORAÇÃO --
+			VAR BRIX_DO_XAROPE =
+			    IF(
+			        CALCULATE(
+			            'PCP-PROLANCA'[_m-ValorAcumuladoVariavelProlancaXXX],
+			            'PCP-PROLANCA'[VAR_CODIGO] = "000VXXAROP",
+			            'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			            'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Brix do Xarope",
+			            'AREAS-PRODUCAO'[Setor] = "TRC - TRATAMENTO DE CALDO"
+			        ) <= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- FERMENTAÇÃO & DESTILARIA --
+			VAR EFICIENCIA_DESTILACAO =
+			    IF(
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "00RENDDEST",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Eficiência Destilação",
+			            'AREAS-PRODUCAO'[Setor] = "FAE - FABRICA DE ETANOL"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO MECÂNICA --
+			VAR ADERENCIA_MAM =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Backlog de Execução",
+			            'AREAS-PRODUCAO'[Setor] = "MAM - MAN. MECANICA"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO ELÉTRICA, INSTRUMENTAÇÃO & CASA DE FORÇA --
+			VAR ADERENCIA_MEI =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Backlog de Execução",
+			            'AREAS-PRODUCAO'[Setor] = "MEI - MAN. ELETRICA E INSTRUMENTACAO"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO CIVIL --
+			VAR ADERENCIA_MAC =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Backlog de Execução",
+			            'AREAS-PRODUCAO'[Setor] = "MAC - MAN. CIVIL"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO CALDEIRARIA --
+			VAR ADERENCIA_MCA =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Backlog de Execução",
+			            'AREAS-PRODUCAO'[Setor] = "MCA - MAN. CALDEIRARIA"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			RETURN
+			    (EXTRACAO_ATR + CONSUMO_H2O_BRUTA + RECUPERACAO_FABRICA + EFICIENCIA_DESTILACAO + 
+			     BRIX_DO_XAROPE + ADERENCIA_MAM + ADERENCIA_MEI + ADERENCIA_MAC + ADERENCIA_MCA) / 9 * 100
+			
+			```
+		lineageTag: f746d26b-b88c-47dc-ac92-a146605f7d7c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-MaiorMelhorIpm02 = ```
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Resultado Acumulado
+			var real = [_m-TotalIpm02]
+			
+			var rank1 = SUM(
+			    'AREAS-APOIO'[RANK1]
+			    )
+			
+			var rank2 = SUM(
+			    'AREAS-APOIO'[Rank2_numero.1]
+			    )
+			
+			var rank3 = SUM(
+			    'AREAS-APOIO'[RANK3 _numero.1]
+			    )
+			
+			//para indicador maior melhor
+			var result = 
+			    IF(real < rank1, 0, //vermelho
+			                IF(real < rank2, 1, //amarelo
+			                    IF(real < rank3, 2, //verde
+			                                        3  //azul
+			                        )
+			                    )
+			        )
+			
+			return
+			
+			result
+			
+			
+			
+			```
+		formatString: 0
+		lineageTag: 79adca91-d22e-4489-8a61-a4cc9cc0b023
+
+	measure _m-R$MaiorMelhorIpm02 = ```
+			
+			VAR PONTOS = [_m-TotalIpm02]
+			
+			VAR TOTPONTOS = CALCULATE(
+			    [_m-TotalIpm02]
+			//    ALL(FAT_AREAS_APOIO[PILAR])
+			)
+			
+			VAR VLRANK2 = DIVIDE(SUM('AREAS-APOIO'[Valor_rank2]), TOTPONTOS, 0) * PONTOS
+			VAR VLRANK3 = DIVIDE(SUM('AREAS-APOIO'[Valor_rank3]), TOTPONTOS,0) * PONTOS
+			
+			VAR COND = SWITCH(
+			    TRUE(),
+			    [_m-MaiorMelhorIpm02] = 2, VLRANK2,
+			    [_m-MaiorMelhorIpm02] = 3, VLRANK3
+			)
+			
+			RETURN
+			COND + 0
+			
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: e2464560-c0a1-4c21-99ec-82298d9e71e8
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-AnalisesInterlaboratoriaisAreasApoio = ```
+			
+			//será utilizado como parâmetro para cor do cartão do resultado do Resultado Acumulado
+			var real = [_m-ValorAcumuladoVariavelPcp]
+			
+			var rank1 = SUM(
+			    'AREAS-APOIO'[RANK1]
+			    )
+			
+			var rank2 = SUM(
+			    'AREAS-APOIO'[Rank2_numero.1]
+			    )
+			
+			var rank3 = SUM(
+			    'AREAS-APOIO'[RANK3 _numero.1]
+			    )
+			
+			//para indicador maior melhor
+			var result = 
+			    IF(real < rank1, 0, //vermelho
+			                IF(real < rank2, 1, //amarelo
+			                    IF(real < rank3, 2, //verde
+			                                        3  //azul
+			                        )
+			                    )
+			        )
+			
+			return
+			
+			result
+			
+			
+			
+			```
+		formatString: 0
+		lineageTag: 4d71e3e5-5591-4931-89ba-3a6ec7780274
+
+	measure _m-R$AnalisesInterlaboratoriaisAreasApoio = ```
+			
+			VAR PONTOS = [_m-ValorAcumuladoVariavelPcp]
+			
+			VAR VLRANK2 = SUM('AREAS-APOIO'[Valor_rank2])  
+			VAR VLRANK3 = SUM('AREAS-APOIO'[Valor_rank3])  
+			
+			VAR COND = SWITCH(
+			    TRUE(),
+			    [_m-AnalisesInterlaboratoriaisAreasApoio] = 2, VLRANK2,
+			    [_m-AnalisesInterlaboratoriaisAreasApoio] = 3, VLRANK3,
+			    0  // Valor padrão caso não atenda às condições
+			)
+			
+			RETURN
+			    COND
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 53731717-250a-45f4-a01e-2990705c4c6b
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-CartaoValorEntre_A-&-B_MelhorAreasApoio = ```
+			
+			// Será utilizado como parâmetro para cor do cartão do resultado do IPM-VARIAVEIS-PCP-ACUMULADO
+			
+			VAR REAL = SUM('AREAS-APOIO'[RESULTADO])
+			
+			    VAR RANK1 = SUM(
+			        'AREAS-APOIO'[RANK1]
+			        )
+			
+			    VAR RANK2_MIN = SUM(
+			        'AREAS-APOIO'[Rank2_numero.1]
+			        )
+			
+			    VAR RANK3_MIN = SUM(
+			        'AREAS-APOIO'[RANK3 _numero.1]
+			        )
+			
+			    VAR RANK2_MAX = SUM(
+			        'AREAS-APOIO'[Rank2_numero.2]
+			        )
+			
+			    VAR RANK3_MAX = SUM(
+			        'AREAS-APOIO'[RANK3 _numero.2]
+			        )
+			
+			// --------------------------------------------------------||------------------------------------------------//
+			
+			// Regra para indicador valor entre primeiro - segundo melhor
+			
+			VAR RESULT = 
+			    IF(
+			        AND(
+			            REAL >= RANK1, REAL <= RANK2_MIN
+			        ),
+			        1, // Amarelo
+			
+			        IF(
+			            AND(
+			                REAL >= RANK2_MIN, REAL <= RANK3_MIN
+			            ),
+			            2, // Verde
+			
+			            IF(
+			                AND(
+			                    REAL >= RANK3_MIN, REAL <= RANK3_MAX
+			                ),
+			                3, // Azul
+			                    0 // Vermelho
+			            )
+			        )
+			    )
+			                    
+			RETURN
+			    RESULT
+			```
+		formatString: 0
+		lineageTag: e3adaa8a-9a61-4a32-82bd-8c45ab76e884
+
+	measure _m-R$ValorEntre_A_&_B_AreasApoio =
+			
+			VAR PONTOS = SUM('AREAS-APOIO'[RESULTADO])
+			
+			RETURN
+			    IF(
+			        PONTOS = 0,
+			        0,  // Se PONTOS = 0, retorna 0 (não pontuou)
+			        VAR CARTAO = [_m-CartaoValorEntre_A-&-B_MelhorAreasApoio]  // Classificação do cartão (2 ou 3)
+			        RETURN
+			            SWITCH(
+			                CARTAO,
+			                2, SUM('AREAS-APOIO'[Valor_rank2]),  // Rank 2 (valor fixo)
+			                3, SUM('AREAS-APOIO'[Valor_rank3]),  // Rank 3 (valor fixo)
+			                0  // Fallback para outros valores
+			            )
+			    )
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: facd8a8d-8b6c-471d-881b-25ada34a2c06
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure _m-TotalIpm04-UVP = ```
+			
+			// -- EXTRAÇÃO --
+			VAR CONSUMO_CHAPISCO_ATR =
+			    VAR ValorChapisco = 
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'AREAS-PRODUCAO'[Indicador] = "Consumo de Chapisco",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "CONSELEARA",
+			            'AREAS-PRODUCAO'[Setor] = "EXT - EXTRAÇÃO"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Consumo de Chapisco",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "EXT - EXTRAÇÃO"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorChapisco),
+			            IF(ValorChapisco >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- UTILIDADES --
+			VAR CONTROLE_PH =
+			    VAR ValorPH = 
+			        CALCULATE(
+			            'PCP-PROLANCA'[_m-ValorAcumuladoVariavelProlancaXXX],
+			            'PCP-PROLANCA'[VAR_CODIGO] = "0000PH_ALI",
+			            'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Controle pH (Alimentação Caldeira)",
+			            'AREAS-PRODUCAO'[Setor] = "UTI - UTILIDADES"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Controle pH (Alimentação Caldeira)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "UTI - UTILIDADES"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorPH),
+			            IF(ValorPH >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- FABRICA DE AÇUCAR --
+			VAR COR_ACUCAR_FABRICA =
+			    VAR ValorCor = 
+			        CALCULATE(
+			            'PCP-PROLANCA'[_m-ValorAcumuladoVariavelProlancaXXX],
+			            'PCP-PROLANCA'[VAR_CODIGO] = "0CORACUCAR",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Controle pH (Cor do Açúcar)",
+			            'AREAS-PRODUCAO'[Setor] = "FAA - FABRICA DE ACUCAR"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Controle pH (Cor do Açúcar)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "FAA - FABRICA DE ACUCAR"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorCor),
+			            IF(ValorCor >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- TRATAMENTO DE CALDO --
+			VAR POL_DA_TORTA_TRC =
+			    VAR ValorPol = 
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "PPERDMULEV",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Perdas no Multijato",
+			            'AREAS-PRODUCAO'[Setor] = "TRC - TRATAMENTO DE CALDO"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Perdas no Multijato",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "TRC - TRATAMENTO DE CALDO"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorPol),
+			            IF(ValorPol <= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- FABRICA DE ETANOL --
+			VAR CONSUMO_ACIDO_FAE =
+			    VAR ValorAcido = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Consumo de Ácido Sulfúrico",
+			            'AREAS-PRODUCAO'[Setor] = "FAE - FABRICA DE ETANOL"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Consumo de Ácido Sulfúrico",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "FAE - FABRICA DE ETANOL"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorAcido),
+			            IF(ValorAcido <= Rank1, 1, 0),
+			            0
+			        )
+			
+			// -- MANUTENÇÕES (todas com mesma estrutura) --
+			VAR HRS_REALIZADAS_CORRETIVAS_MAM =
+			    VAR ValorHoras = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Setor] = "MAM - MAN. MECANICA"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MAM - MAN. MECANICA"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorHoras),
+			            IF(ValorHoras >= Rank1, 1, 0),  // Note que aqui é >= (diferente dos outros que são <=)
+			            0
+			        )
+			
+			VAR HRS_REALIZADAS_CORRETIVAS_MEI =
+			    VAR ValorHoras = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Setor] = "MEI - MAN. ELETRICA E INSTRUMENTACAO"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MEI - MAN. ELETRICA E INSTRUMENTACAO"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorHoras),
+			            IF(ValorHoras >= Rank1, 1, 0),
+			            0
+			        )
+			
+			VAR HRS_REALIZADAS_CORRETIVAS_MAC =
+			    VAR ValorHoras = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Setor] = "MAC - MAN. CIVIL"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MAC - MAN. CIVIL"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorHoras),
+			            IF(ValorHoras >= Rank1, 1, 0),
+			            0
+			        )
+			
+			VAR HRS_REALIZADAS_CORRETIVAS_MCA =
+			    VAR ValorHoras = 
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Setor] = "MCA - MAN. CALDEIRARIA"
+			        )
+			    VAR Rank1 = 
+			        CALCULATE(
+			            SUM('AREAS-APOIO'[RANK1]),
+			            'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas (Fora programação)",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "MCA - MAN. CALDEIRARIA"
+			        )
+			    RETURN
+			        IF(
+			            NOT ISBLANK(ValorHoras),
+			            IF(ValorHoras >= Rank1, 1, 0),
+			            0
+			        )
+			
+			// Cálculo da média final
+			VAR TOTAL_INDICATORS = 9
+			VAR SUM_INDICATORS = 
+			    CONSUMO_CHAPISCO_ATR + CONTROLE_PH + COR_ACUCAR_FABRICA + 
+			    POL_DA_TORTA_TRC + CONSUMO_ACIDO_FAE + 
+			    HRS_REALIZADAS_CORRETIVAS_MAM + HRS_REALIZADAS_CORRETIVAS_MEI + 
+			    HRS_REALIZADAS_CORRETIVAS_MAC + HRS_REALIZADAS_CORRETIVAS_MCA
+			
+			RETURN
+			    DIVIDE(SUM_INDICATORS, TOTAL_INDICATORS, 0) * 100
+			```
+		lineageTag: 1950018c-d72b-4d6d-9ac7-9d16ffa6cb61
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _m-TotalIpm02-UCP = ```
+			
+			
+			// -- EXTRAÇÃO --
+			VAR EXTRACAO_ATR =
+			    IF(
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'AREAS-PRODUCAO'[Indicador] = "Extração ART",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "EXTRCANART",
+			            'AREAS-PRODUCAO'[Setor] = "EXT - EXTRAÇÃO"
+			        ) <= SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			        1,
+			        0
+			    )
+			
+			// -- UTILIDADES --
+			VAR CONSUMO_H2O_BRUTA =
+			IF(
+			    CALCULATE(
+			        SUMX(FILTER('AREAS-PRODUCAO', 'AREAS-PRODUCAO'[Pilar] = "IPM"), 1),
+			        'AREAS-PRODUCAO'[Indicador] = "Consumo de Água Bruta",
+			        'PCP-PROLANCA'[VAR_CODIGO]="0AGBRUTATC",
+			        'AREAS-PRODUCAO'[Setor] = "UTI - UTILIDADES"
+			    ) <= SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			    1,
+			    0
+			)
+			
+			// -- FABRICA DE AÇUCAR --
+			VAR SACAS_ACUCAR_FABRICA =
+			    IF(
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-SacasAcucarTonCana],
+			            'AREAS-PRODUCAO'[Indicador] = "Sacas de açucar p/ Ton Cana",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Setor] = "FAA - FABRICA DE ACUCAR"
+			        ) >= SUM('AREAS-PRODUCAO'[Rank1_Number.1]),
+			        1,
+			        0
+			    )
+			
+			// -- TRATAMENTO DE CALDO & EVAPORAÇÃO --
+			VAR BRIX_DO_XAROPE =
+			    IF(
+			        CALCULATE(
+			            'PCP-PROLANCA'[_m-ValorAcumuladoVariavelProlancaXXX],
+			            'PCP-PROLANCA'[VAR_CODIGO] = "000VXXAROP",
+			            'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			            'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Brix do Xarope",
+			            'AREAS-PRODUCAO'[Setor] = "TRC - TRATAMENTO DE CALDO"
+			        ) <= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- FERMENTAÇÃO & DESTILARIA --
+			VAR EFICIENCIA_DESTILACAO =
+			    IF(
+			        CALCULATE(
+			            'PCP-ACUMULADO'[_m-ValorAcumuladoVariavelPcp],
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "00RENDDEST",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Eficiência Destilação",
+			            'AREAS-PRODUCAO'[Setor] = "FAE - FABRICA DE ETANOL"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO MECÂNICA --
+			VAR ADERENCIA_MAM =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Backlog de Execução",
+			            'AREAS-PRODUCAO'[Setor] = "MAM - MAN. MECANICA"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO ELÉTRICA, INSTRUMENTAÇÃO & CASA DE FORÇA --
+			VAR ADERENCIA_MEI =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Backlog de Execução",
+			            'AREAS-PRODUCAO'[Setor] = "MEI - MAN. ELETRICA E INSTRUMENTACAO"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO CIVIL --
+			VAR ADERENCIA_MAC =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Backlog de Execução",
+			            'AREAS-PRODUCAO'[Setor] = "MAC - MAN. CIVIL"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			// -- MANUTENÇÃO CALDEIRARIA --
+			VAR ADERENCIA_MCA =
+			    IF(
+			        CALCULATE(
+			            SUM('AREAS-PRODUCAO'[Resultado]),
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'AREAS-PRODUCAO'[Indicador] = "Backlog de Execução",
+			            'AREAS-PRODUCAO'[Setor] = "MCA - MAN. CALDEIRARIA"
+			        ) >= SUM('AREAS-APOIO'[RANK1]),
+			        1,
+			        0
+			    )
+			
+			RETURN
+			    (EXTRACAO_ATR + CONSUMO_H2O_BRUTA + SACAS_ACUCAR_FABRICA + EFICIENCIA_DESTILACAO + 
+			     BRIX_DO_XAROPE + ADERENCIA_MAM + ADERENCIA_MEI + ADERENCIA_MAC + ADERENCIA_MCA) / 9 * 100
+			
+			```
+		lineageTag: dd567812-8183-4154-b1fd-4c7285068132
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Safra
+		dataType: string
+		lineageTag: a3b99cee-62c7-44cb-b6b6-6bff163b2bca
+		summarizeBy: none
+		sourceColumn: Safra
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unidade
+		dataType: string
+		lineageTag: 9ad10a42-e0c8-4e2c-946a-6366dd6a6e56
+		summarizeBy: none
+		sourceColumn: Unidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Area
+		dataType: string
+		lineageTag: 425ed4d5-b567-444c-8864-ca483d977739
+		summarizeBy: none
+		sourceColumn: Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column RANK1
+		dataType: double
+		formatString: 0
+		lineageTag: f2ada1da-5d2b-47cb-81c7-770d74d91b53
+		summarizeBy: sum
+		sourceColumn: RANK1
+
+		annotation SummarizationSetBy = Automatic
+
+	column RANK2
+		dataType: string
+		lineageTag: 547171c9-6b28-486f-a725-a3efa1c6cdad
+		summarizeBy: none
+		sourceColumn: RANK2
+
+		annotation SummarizationSetBy = Automatic
+
+	column RANK3
+		dataType: string
+		lineageTag: 67504de4-80a9-4542-a5ec-329f11f7ad6b
+		summarizeBy: none
+		sourceColumn: RANK3
+
+		annotation SummarizationSetBy = Automatic
+
+	column PONTOS
+		dataType: double
+		lineageTag: 7ab24d61-5203-43c4-8ec0-505e6d0917e5
+		summarizeBy: sum
+		sourceColumn: PONTOS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RESULTADO
+		dataType: double
+		lineageTag: 0e4b4a3b-7b1c-4bb2-bc48-2e9e0341a203
+		summarizeBy: sum
+		sourceColumn: RESULTADO
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column VALOR
+		dataType: double
+		lineageTag: 5ad64299-d6fa-4343-9909-b8f1bf215836
+		summarizeBy: sum
+		sourceColumn: VALOR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PILAR
+		dataType: string
+		lineageTag: 11a41758-2a19-4ad7-83a8-50dbe5a9f23a
+		summarizeBy: none
+		sourceColumn: PILAR
+
+		annotation SummarizationSetBy = Automatic
+
+	column Periodo
+		dataType: string
+		lineageTag: fed3ece1-e052-4f13-af1a-a88bd9681841
+		summarizeBy: none
+		sourceColumn: Periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Valor_rank3
+		dataType: decimal
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: dfd6f196-f7f9-49e4-8b84-0bb54de6dd55
+		summarizeBy: sum
+		sourceColumn: Valor_rank3
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Valor_rank2
+		dataType: decimal
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 62900579-075d-463d-9d85-0d1ef00c9797
+		summarizeBy: sum
+		sourceColumn: Valor_rank2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column 'Rank2_numero.1'
+		dataType: double
+		formatString: 0
+		lineageTag: 30bd42f7-6a43-4015-8246-dfae4076c6a4
+		summarizeBy: sum
+		sourceColumn: Rank2_numero.1
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rank2_numero.2'
+		dataType: double
+		lineageTag: 40f45630-9c54-474b-a927-5541d9228c33
+		summarizeBy: sum
+		sourceColumn: Rank2_numero.2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'RANK3 _numero.1'
+		dataType: double
+		formatString: 0
+		lineageTag: bbd02c89-b71a-4c9d-b04d-9d3b794bb6fc
+		summarizeBy: sum
+		sourceColumn: RANK3 _numero.1
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'RANK3 _numero.2'
+		dataType: double
+		lineageTag: b4c78a83-cb9d-4ea1-aeec-cbcb84b79467
+		summarizeBy: sum
+		sourceColumn: RANK3 _numero.2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition AREAS-APOIO = m
+		mode: import
+		queryGroup: 'BASE E MEDIDAS DATABASE SHAREPOINT'
+		source =
+				let
+				    Fonte = SharePoint.Tables("https://valedotijuco.sharepoint.com/sites/GestoIndustrial/progexelencia", [Implementation=null, ApiVersion=15]),
+				    #"b537bd77-fae1-470a-ad7a-83b24ea8b890" = Fonte{[Id="b537bd77-fae1-470a-ad7a-83b24ea8b890"]}[Items],
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"b537bd77-fae1-470a-ad7a-83b24ea8b890",{{"ID", "ID.1"}}),
+				    #"Outras Colunas Removidas" = Table.SelectColumns(#"Colunas Renomeadas",{"Safra", "Unidade", "Area", "RANK1", "RANK2", "RANK3", "PONTOS", "RESULTADO", "VALOR", "PILAR", "Periodo", "Valor_rank3", "Valor_rank2"}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Outras Colunas Removidas",{{"Safra", type text}, {"Unidade", type text}, {"Area", type text}, {"PILAR", type text}, {"RANK1", type number}, {"RANK2", type text}, {"RANK3", type text}, {"PONTOS", type number}, {"RESULTADO", type number}, {"VALOR", type number}, {"Valor_rank3", Currency.Type}, {"Valor_rank2", Currency.Type}}),
+				    #"Coluna Duplicada" = Table.DuplicateColumn(#"Tipo Alterado", "RANK2", "RANK2 - Copiar"),
+				    #"Colunas Renomeadas1" = Table.RenameColumns(#"Coluna Duplicada",{{"RANK2 - Copiar", "Rank2_numero"}}),
+				    #"Dividir Coluna por Delimitador" = Table.SplitColumn(Table.TransformColumnTypes(#"Colunas Renomeadas1", {{"Rank2_numero", type text}}, "pt-BR"), "Rank2_numero", Splitter.SplitTextByDelimiter("-", QuoteStyle.None), {"Rank2_numero.1", "Rank2_numero.2"}),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Dividir Coluna por Delimitador",{{"Rank2_numero.1", type number}, {"Rank2_numero.2", type number}}),
+				    #"Coluna Duplicada1" = Table.DuplicateColumn(#"Tipo Alterado1", "RANK3", "RANK3 - Copiar"),
+				    #"Colunas Renomeadas2" = Table.RenameColumns(#"Coluna Duplicada1",{{"RANK3 - Copiar", "RANK3 _numero"}}),
+				    #"Dividir Coluna por Delimitador1" = Table.SplitColumn(#"Colunas Renomeadas2", "RANK3 _numero", Splitter.SplitTextByDelimiter("-", QuoteStyle.None), {"RANK3 _numero.1", "RANK3 _numero.2"}),
+				    #"Tipo Alterado2" = Table.TransformColumnTypes(#"Dividir Coluna por Delimitador1",{{"RANK3 _numero.1", type number}, {"RANK3 _numero.2", type number}})
+				in
+				    #"Tipo Alterado2"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

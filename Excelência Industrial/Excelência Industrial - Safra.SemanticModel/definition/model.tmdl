@@ -17,7 +17,7 @@ queryGroup 'PILAR GPE'
 	annotation PBI_QueryGroupOrder = 1
 
 /// TABELA DE PARA:
-///  NOVOS CDCS = ANTIGOS CDCS
+/// NOVOS CDCS = ANTIGOS CDCS
 queryGroup 'TABELA DE PARA'
 
 	annotation PBI_QueryGroupOrder = 2
@@ -30,22 +30,24 @@ annotation PBIDesktopVersion = 2.144.878.0 (25.06)+9cca29236de5114792f4d7188221f
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["fMarcacoesManuais","FAT_AREAS_APOIO","_DIM_Metas","NOVOS-CDC","IPM_fProlanca","IPM_fDadosPCPAcumulado","ULTIMA-ATUALIZAÇÃO","UNIDADE"]
+annotation PBI_QueryOrder = ["ESQUECIMENTOS-REGISTRO-PONTO","AREAS-APOIO","AREAS-PRODUCAO","NOVOS-CDC","PCP-PROLANCA","PCP-ACUMULADO","PCP-DADOS-VERSO-CARTILHA","ULTIMA-ATUALIZACAO","UNIDADE"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
-ref table fMarcacoesManuais
-ref table FAT_AREAS_APOIO
-ref table _DIM_Metas
+ref table ESQUECIMENTOS-REGISTRO-PONTO
+ref table AREAS-APOIO
+ref table AREAS-PRODUCAO
 ref table NOVOS-CDC
-ref table IPM_fProlanca
-ref table IPM_fDadosPCPAcumulado
+ref table PCP-PROLANCA
+ref table PCP-ACUMULADO
 ref table CALENDARIO-DAX
 ref table UNIDADE
-ref table ULTIMA-ATUALIZAÇÃO
+ref table ULTIMA-ATUALIZACAO
 ref table SOMA-TOTAL-PILAR-GPE
 ref table SOMA-TOTAL-PILAR-IPM
 ref table SOMA-VALOR-TOTAL-PILARES
+ref table PCP-DADOS-VERSO-CARTILHA
+ref table ANO-SAFRA
 
 ref cultureInfo pt-BR
 

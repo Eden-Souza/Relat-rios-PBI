@@ -7,33 +7,33 @@ table SOMA-TOTAL-PILAR-IPM
 			    VAR APROVIND = CALCULATE(
 			
 			        [_m-R$MaiorMelhorPcpAcumulado],
-			        '_DIM_Metas'[Indicador] = "Aproveitamento de Tempo Industrial",
-			        '_DIM_Metas'[Pilar] = "IPM",
-			        'IPM_fDadosPCPAcumulado'[VAR_CODIGO] = "00APROVIND"
+			        'AREAS-PRODUCAO'[Indicador] = "Aproveitamento de Tempo Industrial",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM",
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "00APROVIND"
 			    )
 			
 			    VAR EXTRACAO = CALCULATE(
 			
 			        [_m-R$MaiorMelhorPcpAcumulado],
-			        '_DIM_Metas'[Indicador] = "Extração ART",
-			        '_DIM_Metas'[Pilar] = "IPM",
-			        'IPM_fDadosPCPAcumulado'[VAR_CODIGO] = "EXTRCANART"
+			        'AREAS-PRODUCAO'[Indicador] = "Extração ART",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM",
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "EXTRCANART"
 			    )
 			
 			        VAR UMIDADE = CALCULATE(
 			
 			            [_m-R$MenorMelhorPcpAcumulado],
-			            '_DIM_Metas'[Indicador] = "Umidade do Bagaço",
-			            '_DIM_Metas'[Pilar] = "IPM",
-			            'IPM_fDadosPCPAcumulado'[VAR_CODIGO] = "0UMID_DESF"
+			            'AREAS-PRODUCAO'[Indicador] = "Umidade do Bagaço",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "0UMID_DESF"
 			        )
 			
 			            VAR CHAPISCO = CALCULATE(
 			
 			                [_m-R$ValorEntre_A_&_B_PcpAcumulado],
-			                '_DIM_Metas'[Indicador] = "Consumo de Chapisco",
-			                '_DIM_Metas'[Pilar] = "IPM",
-			                'IPM_fDadosPCPAcumulado'[VAR_CODIGO] = "CONSELEARA"
+			                'AREAS-PRODUCAO'[Indicador] = "Consumo de Chapisco",
+			                'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                'PCP-ACUMULADO'[VAR_CODIGO] = "CONSELEARA"
 			            )
 			
 			RETURN
@@ -57,9 +57,9 @@ table SOMA-TOTAL-PILAR-IPM
 			        CALCULATE(
 			
 			            [_m-R$MaiorMelhorPcpAcumulado],
-			            '_DIM_Metas'[Indicador] = "Aproveitamento de Tempo Industrial",
-			            '_DIM_Metas'[Pilar] = "IPM",
-			            'IPM_fDadosPCPAcumulado'[VAR_CODIGO] = "00APROVIND"
+			            'AREAS-PRODUCAO'[Indicador] = "Aproveitamento de Tempo Industrial",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "00APROVIND"
 			        )
 			
 			        VAR CONSH2OBRUTA =
@@ -67,29 +67,29 @@ table SOMA-TOTAL-PILAR-IPM
 			            CALCULATE(
 			
 			                [_m-R$MenorMelhorPcpAcumulado],
-			                '_DIM_Metas'[Indicador] = "Consumo de Água Bruta",
-			                '_DIM_Metas'[Pilar] = "IPM",
-			                'IPM_fDadosPCPAcumulado'[VAR_CODIGO] = "0AGBRUTATC"
+			                'AREAS-PRODUCAO'[Indicador] = "Consumo de Água Bruta",
+			                'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                'PCP-ACUMULADO'[VAR_CODIGO] = "0AGBRUTATC"
 			            )
 			
 			            VAR CTRLSILSAT = CALCULATE(
 			
 			                [_m-R$CartaoMenorMelhorProlancaXxx],
-			                'IPM_fProlanca'[100 SafraProlanca] = "2025/2026",
-			                '_DIM_Metas'[Indicador] = "Controle de Sílica (Vapor Saturado)",
-			                '_DIM_Metas'[Pilar] = "IPM",
-			                'IPM_fProlanca'[VAR_CODIGO] = "00MEDVPSAT",
-			                'IPM_fProlanca'[SUF_CODIGO] = "01"
+			                'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026",
+			                'AREAS-PRODUCAO'[Indicador] = "Controle de Sílica (Vapor Saturado)",
+			                'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                'PCP-PROLANCA'[VAR_CODIGO] = "00MEDVPSAT",
+			                'PCP-PROLANCA'[SUF_CODIGO] = "01"
 			            )
 			
 			                VAR CTRLPH = CALCULATE(
 			
 			                    [_m-R$ValorEntre_A_&_B_ProlancaXxx],
-			                    '_DIM_Metas'[Indicador] = "Controle pH (Alimentação Caldeira)",
-			                    'IPM_fProlanca'[100 SafraProlanca] = "2025/2026",
-			                    '_DIM_Metas'[Pilar] = "IPM",
-			                    'IPM_fProlanca'[VAR_CODIGO] = "0000PH_ALI",
-			                    'IPM_fProlanca'[SUF_CODIGO] = "01"
+			                    'AREAS-PRODUCAO'[Indicador] = "Controle pH (Alimentação Caldeira)",
+			                    'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026",
+			                    'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                    'PCP-PROLANCA'[VAR_CODIGO] = "0000PH_ALI",
+			                    'PCP-PROLANCA'[SUF_CODIGO] = "01"
 			                )
 			
 			    var INDICADOR = CTRLPH + CTRLSILSAT + CONSH2OBRUTA + APROVIND
@@ -108,31 +108,31 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR CRISMASSAA = CALCULATE(
 			
 			    [_m-R$MaiorMelhorPcpAcumulado],
-			    _DIM_Metas[Indicador] = "Rendimento de Cristais da Massa A",
-			    IPM_fDadosPCPAcumulado[VAR_CODIGO] = "CRISMASSAA"
+			    'AREAS-PRODUCAO'[Indicador] = "Rendimento de Cristais da Massa A",
+			    'PCP-ACUMULADO'[VAR_CODIGO] = "CRISMASSAA"
 			)
 			
 			VAR RECUPER = CALCULATE(
 			
 			    [_m-R$MaiorMelhorPcpAcumulado],
-			    _DIM_Metas[Indicador] = "Recuperação de Fábrica (SJM)"
-			    ,IPM_fDadosPCPAcumulado[VAR_CODIGO] ="RECUPERFAB"
+			    'AREAS-PRODUCAO'[Indicador] = "Recuperação de Fábrica (SJM)"
+			    ,'PCP-ACUMULADO'[VAR_CODIGO] ="RECUPERFAB"
 			)
 			
 			VAR PERDAS = CALCULATE(
 			
 			    [_m-R$MenorMelhorPcpAcumulado],
-			    _DIM_Metas[Indicador] = "Perdas no Multijato",
-			    IPM_fDadosPCPAcumulado[VAR_CODIGO] ="0PPERDMULEV",
-			    _DIM_Metas[Pilar]="IPM"
+			    'AREAS-PRODUCAO'[Indicador] = "Perdas no Multijato",
+			    'PCP-ACUMULADO'[VAR_CODIGO] ="0PPERDMULEV",
+			    'AREAS-PRODUCAO'[Pilar]="IPM"
 			)
 			
 			VAR COR = CALCULATE(
 			
 			    [_m-R$CartaoMenorMelhorProlancaXxx],
-			    _DIM_Metas[Indicador] = "Cor do Açúcar",
-			    IPM_fProlanca[VAR_CODIGO] ="0CORACUCAR",
-			    IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			    'AREAS-PRODUCAO'[Indicador] = "Cor do Açúcar",
+			    'PCP-PROLANCA'[VAR_CODIGO] ="0CORACUCAR",
+			    'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			)
 			
 			VAR INDICADOR = CRISMASSAA + RECUPER + PERDAS + COR
@@ -165,42 +165,42 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR TURBIDEZ = 
 			    CALCULATE(
 			        [_m-R$CartaoMenorMelhorProlancaXxx],
-			        _DIM_Metas[Indicador] = "Controle de Turbidez (Saída Decantador Açúcar)",
-			        IPM_fProlanca[LAN_HORA] = "XXXX",
-			        _DIM_Metas[Pilar] = "IPM",
-			        IPM_fProlanca[VAR_CODIGO] = "0TURBIDEZ",
-			        IPM_fProlanca[SUF_CODIGO] = "01",
-			        IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			        'AREAS-PRODUCAO'[Indicador] = "Controle de Turbidez (Saída Decantador Açúcar)",
+			        'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM",
+			        'PCP-PROLANCA'[VAR_CODIGO] = "0TURBIDEZ",
+			        'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			        'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			    )
 			
 			    VAR BRIX = 
 			        CALCULATE(
 			            [_m-R$CartaoMaiorMelhorProlancaXxx],
-			            _DIM_Metas[Indicador] = "Brix do Xarope",
-			            IPM_fProlanca[LAN_HORA] = "XXXX",
-			            _DIM_Metas[Pilar] = "IPM",
-			            IPM_fProlanca[VAR_CODIGO] = "000BXXAROP",
-			            IPM_fProlanca[SUF_CODIGO] = "01",
-			            IPM_fProlanca[100 SafraProlanca] = "2025/2026"        
+			            'AREAS-PRODUCAO'[Indicador] = "Brix do Xarope",
+			            'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-PROLANCA'[VAR_CODIGO] = "000BXXAROP",
+			            'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			            'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"        
 			        )
 			
 			        VAR PH = 
 			            CALCULATE(
 			                [_m-R$ValorEntre_A_&_B_ProlancaXxx], 
-			                _DIM_Metas[Indicador] = "Controle de p.H (Caldo Dosado)",
-			                _DIM_Metas[Pilar] = "IPM",
-			                IPM_fProlanca[VAR_CODIGO] = "0CMISTOPHF",
-			                IPM_fProlanca[SUF_CODIGO] = "01",
-			                IPM_fProlanca[LAN_HORA] = "XXXX",
-			                IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			                'AREAS-PRODUCAO'[Indicador] = "Controle de p.H (Caldo Dosado)",
+			                'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                'PCP-PROLANCA'[VAR_CODIGO] = "0CMISTOPHF",
+			                'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			                'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			                'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			            )
 			
 			            VAR POL = 
 			                CALCULATE(
 			                    [_m-R$MenorMelhorPcpAcumulado],
-			                    _DIM_Metas[Pilar] = "IPM",
-			                    _DIM_Metas[Indicador] = "Pol da Torta",
-			                    IPM_fDadosPCPAcumulado[VAR_CODIGO] = "0MEDPOLTOR"               
+			                    'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                    'AREAS-PRODUCAO'[Indicador] = "Pol da Torta",
+			                    'PCP-ACUMULADO'[VAR_CODIGO] = "0MEDPOLTOR"               
 			                )
 			VAR INDICADOR = POL +TURBIDEZ+PH+BRIX
 			
@@ -220,34 +220,34 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR EFICFERM = 
 			    CALCULATE(
 			        [_m-R$MaiorMelhorPcpAcumulado],     
-			        _DIM_Metas[Indicador] = "Eficiência Fermentação p/ Subprodutos",
-			        IPM_fDadosPCPAcumulado[VAR_CODIGO] = "000RENDFER"
+			        'AREAS-PRODUCAO'[Indicador] = "Eficiência Fermentação p/ Subprodutos",
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "000RENDFER"
 			    )
 			
 			    VAR EFICDEST = 
 			        CALCULATE(
 			            [_m-R$MaiorMelhorPcpAcumulado],      
-			            _DIM_Metas[Indicador] = "Eficiência Destilação",
-			            _DIM_Metas[Pilar] = "IPM",
-			            IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00RENDDEST"
+			            'AREAS-PRODUCAO'[Indicador] = "Eficiência Destilação",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "00RENDDEST"
 			        )
 			
 			        VAR PH = 
 			            CALCULATE(
 			                [_m-R$ValorEntre_A_&_B_ProlancaXxx],
-			                _DIM_Metas[Pilar] = "IPM",
-			                _DIM_Metas[Indicador]= "Controle de pH (Etanol Hidratado)",
-			                IPM_fProlanca[VAR_CODIGO]="0PRODALCPH",
-			                IPM_fProlanca[LAN_HORA] = "XXXX",
-			                IPM_fProlanca[SUF_CODIGO]="01",
-			                IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			                'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                'AREAS-PRODUCAO'[Indicador]= "Controle de pH (Etanol Hidratado)",
+			                'PCP-PROLANCA'[VAR_CODIGO]="0PRODALCPH",
+			                'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			                'PCP-PROLANCA'[SUF_CODIGO]="01",
+			                'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			            )
 			
 			            VAR ACIDO = 
 			                CALCULATE(
-			                    _DIM_Metas[_m-R$MenorMelhor],
-			                    _DIM_Metas[Indicador] = "Consumo de Ácido Sulfúrico",
-			                    _DIM_Metas[Pilar] = "IPM"
+			                    'AREAS-PRODUCAO'[_m-R$MenorMelhor],
+			                    'AREAS-PRODUCAO'[Indicador] = "Consumo de Ácido Sulfúrico",
+			                    'AREAS-PRODUCAO'[Pilar] = "IPM"
 			            )
 			
 			RETURN
@@ -269,31 +269,31 @@ table SOMA-TOTAL-PILAR-IPM
 			    VAR APROVIND = 
 			        CALCULATE(
 			            [_m-R$MaiorMelhorPcpAcumulado],
-			            _DIM_Metas[Indicador] = "Aproveitamento de Tempo Industrial",
-			            IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00APROVIND"
+			            'AREAS-PRODUCAO'[Indicador] = "Aproveitamento de Tempo Industrial",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "00APROVIND"
 			        )
 			        
 			        VAR CONSAGUA = 
 			            CALCULATE(
 			                [_m-R$MenorMelhorPcpAcumulado],
-			                _DIM_Metas[Indicador] = "Consumo de Água Bruta",
-			                _DIM_Metas[Pilar] = "IPM",
-			                'IPM_fDadosPCPAcumulado'[VAR_CODIGO] = "0AGBRUTATC"
+			                'AREAS-PRODUCAO'[Indicador] = "Consumo de Água Bruta",
+			                'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                'PCP-ACUMULADO'[VAR_CODIGO] = "0AGBRUTATC"
 			            )
 			            VAR SILSAT = 
 			                CALCULATE(
 			                    [_m-R$CartaoMenorMelhorProlancaXxx],
-			                    _DIM_Metas[Indicador] = "Controle de Sílica (Vapor Saturado)",
-			                    IPM_fProlanca[VAR_CODIGO] ="000SIVAPOR",
-			                    IPM_fProlanca[SUF_CODIGO] = "01",
-			                    IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			                    'AREAS-PRODUCAO'[Indicador] = "Controle de Sílica (Vapor Saturado)",
+			                    'PCP-PROLANCA'[VAR_CODIGO] ="000SIVAPOR",
+			                    'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			                    'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			                )
 			
 			                VAR PH = 
 			                    CALCULATE(
 			                        [_m-R$ValorEntre_A_&_B_ProlancaXxx],
-			                        _DIM_Metas[Indicador] = "Controle pH (Alimentação Caldeira)",
-			                        IPM_fProlanca[VAR_CODIGO] ="0000PH_ALI"
+			                        'AREAS-PRODUCAO'[Indicador] = "Controle pH (Alimentação Caldeira)",
+			                        'PCP-PROLANCA'[VAR_CODIGO] ="0000PH_ALI"
 			                    )
 			
 			VAR INDICADORES = APROVIND + consagua + SILSAT + PH
@@ -314,42 +314,42 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR TURBIDEZ = 
 			    CALCULATE(
 			        [_m-R$CartaoMenorMelhorProlancaXxx],
-			        _DIM_Metas[Indicador] = "Controle de Turbidez (Saída Decantador Açúcar)",
-			        _DIM_Metas[Pilar] = "IPM",
-			        IPM_fProlanca[VAR_CODIGO] = "00TURBIDEZ",
-			        IPM_fProlanca[SUF_CODIGO] = "02",
-			        IPM_fProlanca[LAN_HORA] = "XXXX",
-			        IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			        'AREAS-PRODUCAO'[Indicador] = "Controle de Turbidez (Saída Decantador Açúcar)",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM",
+			        'PCP-PROLANCA'[VAR_CODIGO] = "00TURBIDEZ",
+			        'PCP-PROLANCA'[SUF_CODIGO] = "02",
+			        'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			        'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			    )
 			
 			    VAR BRIX = 
 			        CALCULATE(
 			            [_m-R$ValorEntre_A_&_B_ProlancaXxx],  
-			            _DIM_Metas[Indicador]= "Brix do Xarope",
-			            _DIM_Metas[Pilar] = "IPM",
-			            IPM_fProlanca[VAR_CODIGO] = "000BXXAROP",
-			            IPM_fProlanca[LAN_HORA] = "XXXX",
-			            IPM_fProlanca[SUF_CODIGO] = "01",
-			            IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			            'AREAS-PRODUCAO'[Indicador]= "Brix do Xarope",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-PROLANCA'[VAR_CODIGO] = "000BXXAROP",
+			            'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			            'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			            'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			        )
 			
 			        VAR PH = 
 			            CALCULATE(
 			                [_m-R$ValorEntre_A_&_B_ProlancaXxx], 
-			                _DIM_Metas[Indicador]="Controle de p.H (Caldo Dosado)",
-			                _DIM_Metas[Pilar] = "IPM",
-			                IPM_fProlanca[VAR_CODIGO] = "0CMISTOPHF",
-			                IPM_fProlanca[SUF_CODIGO] = "01",
-			                IPM_fProlanca[LAN_HORA] = "XXXX",
-			                IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			                'AREAS-PRODUCAO'[Indicador]="Controle de p.H (Caldo Dosado)",
+			                'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                'PCP-PROLANCA'[VAR_CODIGO] = "0CMISTOPHF",
+			                'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			                'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			                'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			            )
 			
 			            VAR PERDA = 
 			                CALCULATE(
 			                    [_m-R$MenorMelhorPcpAcumulado],
-			                    _DIM_Metas[Indicador]="Perdas no Multijato",
-			                    _DIM_Metas[Pilar] = "IPM",
-			                    IPM_fDadosPCPAcumulado[VAR_CODIGO]="PPERDMULEV"
+			                    'AREAS-PRODUCAO'[Indicador]="Perdas no Multijato",
+			                    'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                    'PCP-ACUMULADO'[VAR_CODIGO]="PPERDMULEV"
 			                )
 			
 			RETURN
@@ -371,29 +371,29 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR EFICFERM = 
 			    CALCULATE(
 			        [_m-R$MaiorMelhorPcpAcumulado],     
-			        _DIM_Metas[Indicador] = "Eficiência Fermentação p/ Subprodutos",
-			        IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00000EFCTC"
+			        'AREAS-PRODUCAO'[Indicador] = "Eficiência Fermentação p/ Subprodutos",
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "00000EFCTC"
 			    )
 			
 			    VAR EFICDEST = 
 			        CALCULATE(
 			            [_m-R$MaiorMelhorPcpAcumulado],      
-			            _DIM_Metas[Indicador] = "Eficiência Destilação",
-			            IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00RENDDEST"
+			            'AREAS-PRODUCAO'[Indicador] = "Eficiência Destilação",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "00RENDDEST"
 			        )
 			
 			        VAR PH = 
 			            CALCULATE(
 			                [_m-R$ValorEntre_A_&_B_ProlancaXxx],
-			                _DIM_Metas[Indicador]= "Controle de pH (Etanol Hidratado)",
-			                IPM_fProlanca[VAR_CODIGO]="0PRODALCPH",
-			                IPM_fProlanca[SUF_CODIGO]="01"
+			                'AREAS-PRODUCAO'[Indicador]= "Controle de pH (Etanol Hidratado)",
+			                'PCP-PROLANCA'[VAR_CODIGO]="0PRODALCPH",
+			                'PCP-PROLANCA'[SUF_CODIGO]="01"
 			            )
 			
 			            VAR ACIDO = 
 			                CALCULATE(
 			                    [_m-R$MenorMelhor],   
-			                    _DIM_Metas[Indicador]="Consumo de Ácido Sulfúrico"
+			                    'AREAS-PRODUCAO'[Indicador]="Consumo de Ácido Sulfúrico"
 			            )
 			
 			RETURN
@@ -415,34 +415,34 @@ table SOMA-TOTAL-PILAR-IPM
 			    VAR APROVIND = 
 			        CALCULATE(
 			            [_m-R$MaiorMelhorPcpAcumulado],
-			            _DIM_Metas[Indicador]= "Aproveitamento de Tempo Industrial",
-			            IPM_fDadosPCPAcumulado[VAR_CODIGO]="00APROVIND"
+			            'AREAS-PRODUCAO'[Indicador]= "Aproveitamento de Tempo Industrial",
+			            'PCP-ACUMULADO'[VAR_CODIGO]="00APROVIND"
 			        )
 			        
 			        VAR CONSAGUA = 
 			        CALCULATE(
 			            [_m-R$MenorMelhorPcpAcumulado],
-			            _DIM_Metas[Indicador]= "Consumo de Água Bruta",
-			            _DIM_Metas[Pilar] = "IPM",
-			            IPM_fDadosPCPAcumulado[VAR_CODIGO]="0AGBRUTATC"
+			            'AREAS-PRODUCAO'[Indicador]= "Consumo de Água Bruta",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO]="0AGBRUTATC"
 			        )
 			
 			        VAR SILSAT = 
 			            CALCULATE(
 			                [_m-R$MaiorMelhorPcpAcumulado],
-			                _DIM_Metas[Indicador]= "Controle de Sílica (Água concentração das caldeiras)",
-			                IPM_fProlanca[VAR_CODIGO]="00MEDSICAL",
-			                _DIM_Metas[Pilar] = "IPM"
+			                'AREAS-PRODUCAO'[Indicador]= "Controle de Sílica (Água concentração das caldeiras)",
+			                'PCP-PROLANCA'[VAR_CODIGO]="00MEDSICAL",
+			                'AREAS-PRODUCAO'[Pilar] = "IPM"
 			            )
 			
 			            VAR PH = 
 			                CALCULATE(
 			                    [_m-R$ValorEntre_A_&_B_ProlancaXxx],
-			                    _DIM_Metas[Indicador] = "Controle pH (Alimentação Caldeira)",
-			                    IPM_fProlanca[VAR_CODIGO]="0000PH_ALI",
-			                    _DIM_Metas[Pilar] = "IPM",
-			                    IPM_fProlanca[SUF_CODIGO] = "01",
-			                    IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			                    'AREAS-PRODUCAO'[Indicador] = "Controle pH (Alimentação Caldeira)",
+			                    'PCP-PROLANCA'[VAR_CODIGO]="0000PH_ALI",
+			                    'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                    'PCP-PROLANCA'[SUF_CODIGO] = "01",
+			                    'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			                )
 			VAR INDICADORES = APROVIND + SILSAT +CONSAGUA+ PH
 			RETURN
@@ -461,34 +461,34 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR CRISMASSAA = CALCULATE(
 			
 			    [_m-R$MaiorMelhorPcpAcumulado],
-			    _DIM_Metas[Indicador]= "Rendimento de Cristais da Massa A",
-			    _DIM_Metas[Pilar] = "IPM",
-			    IPM_fDadosPCPAcumulado[VAR_CODIGO]="CRISMASSAA"
+			    'AREAS-PRODUCAO'[Indicador]= "Rendimento de Cristais da Massa A",
+			    'AREAS-PRODUCAO'[Pilar] = "IPM",
+			    'PCP-ACUMULADO'[VAR_CODIGO]="CRISMASSAA"
 			)
 			
 			VAR SACASACUCAR = CALCULATE(
 			
 			    [_m-R$MaiorMelhorSacasAcucarTonCana],
-			    _DIM_Metas[Indicador] = "Sacas de açucar p/ Ton Cana",
-			    _DIM_Metas[Pilar] = "IPM"
+			    'AREAS-PRODUCAO'[Indicador] = "Sacas de açucar p/ Ton Cana",
+			    'AREAS-PRODUCAO'[Pilar] = "IPM"
 			
 			)
 			
 			VAR PERDAS = CALCULATE(
 			
 			    [_m-R$MenorMelhorPcpAcumulado],
-			    _DIM_Metas[Indicador]= "Perdas no Multijato",
-			    IPM_fDadosPCPAcumulado[VAR_CODIGO]="PPERDMULEV",
-			    _DIM_Metas[Pilar] = "IPM"
+			    'AREAS-PRODUCAO'[Indicador]= "Perdas no Multijato",
+			    'PCP-ACUMULADO'[VAR_CODIGO]="PPERDMULEV",
+			    'AREAS-PRODUCAO'[Pilar] = "IPM"
 			)
 			
 			VAR COR = CALCULATE(
 			
 			    [_m-R$CartaoMenorMelhorProlancaXxx],
-			    _DIM_Metas[Indicador] = "Cor do Açúcar",
-			    _DIM_Metas[Pilar] = "IPM",
-			    IPM_fProlanca[VAR_CODIGO] = "0CORACUCAR",
-			    IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			    'AREAS-PRODUCAO'[Indicador] = "Cor do Açúcar",
+			    'AREAS-PRODUCAO'[Pilar] = "IPM",
+			    'PCP-PROLANCA'[VAR_CODIGO] = "0CORACUCAR",
+			    'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			)
 			
 			
@@ -509,37 +509,37 @@ table SOMA-TOTAL-PILAR-IPM
 			    VAR APROVIND = 
 			        CALCULATE(
 			            [_m-R$MaiorMelhorPcpAcumulado],
-			            '_DIM_Metas'[Indicador] = "Aproveitamento de Tempo Industrial",
-			            '_DIM_Metas'[Pilar] = "IPM",
-			            'IPM_fDadosPCPAcumulado'[VAR_CODIGO] = "00APROVIND"
+			            'AREAS-PRODUCAO'[Indicador] = "Aproveitamento de Tempo Industrial",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "00APROVIND"
 			        )   
 			
 			        VAR BACKLOG = 
 			            CALCULATE(
 			                [_m-R$ValorEntre_A_&_B],
-			                '_DIM_Metas'[Indicador] = "Backlog de Execução",
-			                '_DIM_Metas'[Pilar] = "IPM"
+			                'AREAS-PRODUCAO'[Indicador] = "Backlog de Execução",
+			                'AREAS-PRODUCAO'[Pilar] = "IPM"
 			            )
 			
 			            VAR ADERENCIA_OS = 
 			                CALCULATE(
 			                    [_m-R$MaiorMelhor],
-			                    '_DIM_Metas'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
-			                    '_DIM_Metas'[Pilar] = "IPM"
+			                    'AREAS-PRODUCAO'[Indicador] = "Aderência ao Inicio de Execução de O.S Programada",
+			                    'AREAS-PRODUCAO'[Pilar] = "IPM"
 			                )
 			
 			                VAR HRS_REALZ_CORR = 
 			                    CALCULATE(
 			                        [_m-R$MenorMelhor],
-			                        '_DIM_Metas'[Indicador] = "Índice Horas Realizadas Corretivas  (Fora programação)",
-			                        '_DIM_Metas'[Pilar] = "IPM"
+			                        'AREAS-PRODUCAO'[Indicador] = "Índice Horas Realizadas Corretivas  (Fora programação)",
+			                        'AREAS-PRODUCAO'[Pilar] = "IPM"
 			                    )
 			
 			                    VAR HRS_PROD = 
 			                        CALCULATE(
 			                            [_m-R$MaiorMelhor],
-			                            '_DIM_Metas'[Indicador] = "Horas Produtivas  (Apontamento de Mão de Obra)",
-			                            '_DIM_Metas'[Pilar] = "IPM"
+			                            'AREAS-PRODUCAO'[Indicador] = "Horas Produtivas  (Apontamento de Mão de Obra)",
+			                            'AREAS-PRODUCAO'[Pilar] = "IPM"
 			                        )
 			
 			// ----------- > SOMA VARIÁVEIS
@@ -560,35 +560,35 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR APROV_IND = 
 			    CALCULATE(
 			        [_m-R$MaiorMelhorPcpAreasApoio],     
-			        FAT_AREAS_APOIO[PILAR] = "Aproveitamento de Tempo Industrial",
-			        IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00APROVIND"
+			        'AREAS-APOIO'[PILAR] = "Aproveitamento de Tempo Industrial",
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "00APROVIND"
 			    )
 			
 			        VAR DEV_ACUCAR = 
 			            CALCULATE(
 			                [_m-R$MenorMelhorPcpAreasApoio],      
-			                FAT_AREAS_APOIO[PILAR] = "Devolução de Açúcar",
-			                IPM_fDadosPCPAcumulado[VAR_CODIGO] = "0DEVPROCAC"
+			                'AREAS-APOIO'[PILAR] = "Devolução de Açúcar",
+			                'PCP-ACUMULADO'[VAR_CODIGO] = "0DEVPROCAC"
 			            )
 			
 			                VAR DEV_ETANOL = 
 			                    CALCULATE(
 			                    [_m-R$MenorMelhorPcpAreasApoio],      
-			                    FAT_AREAS_APOIO[PILAR] = "Devolução Etanol",
-			                    IPM_fDadosPCPAcumulado[VAR_CODIGO] = "0DEVPROCET"
+			                    'AREAS-APOIO'[PILAR] = "Devolução Etanol",
+			                    'PCP-ACUMULADO'[VAR_CODIGO] = "0DEVPROCET"
 			
 			                )
 			
 			                    VAR IPM3 = 
 			                        CALCULATE(
 			                            [_m-R$MaiorMelhorIpm03],   
-			                            FAT_AREAS_APOIO[PILAR] = "IPM - Indicador 03"
+			                            'AREAS-APOIO'[PILAR] = "IPM - Indicador 03"
 			                    )
 			
 			                        VAR IPM4 = 
 			                            CALCULATE(
 			                                [_m-R$MaiorMelhorIpm04],   
-			                                FAT_AREAS_APOIO[PILAR] = "IPM - Indicador 04"
+			                                'AREAS-APOIO'[PILAR] = "IPM - Indicador 04"
 			                        )
 			
 			RETURN
@@ -612,33 +612,33 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR APROV_IND = 
 			    CALCULATE(
 			        [_m-R$MaiorMelhorPcpAreasApoio],     
-			        FAT_AREAS_APOIO[PILAR] = "Aproveitamento de Tempo Industrial",
-			        IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00APROVIND"
+			        'AREAS-APOIO'[PILAR] = "Aproveitamento de Tempo Industrial",
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "00APROVIND"
 			    )
 			
 			
 			    VAR IPM2 = 
 			        CALCULATE(
 			            [_m-R$MaiorMelhorIpm02],   
-			            FAT_AREAS_APOIO[PILAR] = "IPM - Indicador 02"
+			            'AREAS-APOIO'[PILAR] = "IPM - Indicador 02"
 			    )
 			
 			        VAR IPM3 = 
 			            CALCULATE(
 			                [_m-R$MaiorMelhorIpm03],   
-			                FAT_AREAS_APOIO[PILAR] = "IPM - Indicador 03"
+			                'AREAS-APOIO'[PILAR] = "IPM - Indicador 03"
 			        )
 			
 			            VAR IPM4 = 
 			                CALCULATE(
 			                    [_m-R$MaiorMelhorIpm04],   
-			                    FAT_AREAS_APOIO[PILAR] = "IPM - Indicador 04"
+			                    'AREAS-APOIO'[PILAR] = "IPM - Indicador 04"
 			            )
 			
 			                VAR IPM5 = 
 			                    CALCULATE(
 			                        [_m-R$MaiorMelhorIpm05],   
-			                        FAT_AREAS_APOIO[PILAR] = "IPM - Indicador 05"
+			                        'AREAS-APOIO'[PILAR] = "IPM - Indicador 05"
 			                )
 			
 			RETURN
@@ -662,37 +662,37 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR APROV_IND = 
 			    CALCULATE(
 			        [_m-R$MaiorMelhorPcpAreasApoio],     
-			        FAT_AREAS_APOIO[PILAR] = "Aproveitamento de Tempo Industrial",
-			        IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00APROVIND"
+			        'AREAS-APOIO'[PILAR] = "Aproveitamento de Tempo Industrial",
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "00APROVIND"
 			    )
 			
 			        VAR DEV_ACUCAR = 
 			            CALCULATE(
 			                [_m-R$MenorMelhorPcpAreasApoio],      
-			                FAT_AREAS_APOIO[PILAR] = "Devolução de Açúcar",
-			                IPM_fDadosPCPAcumulado[VAR_CODIGO] = "0DEVPROCAC"
+			                'AREAS-APOIO'[PILAR] = "Devolução de Açúcar",
+			                'PCP-ACUMULADO'[VAR_CODIGO] = "0DEVPROCAC"
 			            )
 			
 			                VAR DEV_ETANOL = 
 			                    CALCULATE(
 			                    [_m-R$MenorMelhorPcpAreasApoio],      
-			                    FAT_AREAS_APOIO[PILAR] = "Devolução Etanol",
-			                    IPM_fDadosPCPAcumulado[VAR_CODIGO] = "0DEVPROCET"
+			                    'AREAS-APOIO'[PILAR] = "Devolução Etanol",
+			                    'PCP-ACUMULADO'[VAR_CODIGO] = "0DEVPROCET"
 			
 			                )
 			
 			                    VAR TESTE_ACUCAR = 
 			                        CALCULATE(
 			                            [_m-R$AnalisesInterlaboratoriaisAreasApoio],   
-			                            FAT_AREAS_APOIO[PILAR] = "Testes Interlaboratoriais Açúcar",
-						                IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00INTERLAB"
+			                            'AREAS-APOIO'[PILAR] = "Testes Interlaboratoriais Açúcar",
+						                'PCP-ACUMULADO'[VAR_CODIGO] = "00INTERLAB"
 			                    )
 			
 			                        VAR TESTE_ETANOL = 
 			                            CALCULATE(
 			                                [_m-R$AnalisesInterlaboratoriaisAreasApoio],   
-			                                FAT_AREAS_APOIO[PILAR] = "Testes Interlaboratoriais Etanol",
-							                IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00INTERLAB"
+			                                'AREAS-APOIO'[PILAR] = "Testes Interlaboratoriais Etanol",
+							                'PCP-ACUMULADO'[VAR_CODIGO] = "00INTERLAB"
 			                        )
 			
 			RETURN
@@ -715,33 +715,33 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR APROV_IND = 
 			    CALCULATE(
 			        [_m-R$MaiorMelhorPcpAreasApoio],     
-			        FAT_AREAS_APOIO[PILAR] = "Aproveitamento de Tempo Industrial",
-			        IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00APROVIND"
+			        'AREAS-APOIO'[PILAR] = "Aproveitamento de Tempo Industrial",
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "00APROVIND"
 			    )
 			
 			
 			    VAR IPM2 = 
 			        CALCULATE(
 			            [_m-R$ValorEntre_A_&_B_AreasApoio],   
-			            FAT_AREAS_APOIO[PILAR] = "Backlog de Execução"
+			            'AREAS-APOIO'[PILAR] = "Backlog de Execução"
 			    )
 			
 			        VAR IPM3 = 
 			            CALCULATE(
 			                [_m-R$MaiorMelhorAreasApoio],   
-			                FAT_AREAS_APOIO[PILAR] = "Aderência ao início de Execução de O.S Programada"
+			                'AREAS-APOIO'[PILAR] = "Aderência ao início de Execução de O.S Programada"
 			        )
 			
 			            VAR IPM4 = 
 			                CALCULATE(
 			                    [_m-R$MenorMelhorAreasApoio],   
-			                    FAT_AREAS_APOIO[PILAR] = "Índice Horas Realiz. Corretivas"
+			                    'AREAS-APOIO'[PILAR] = "Índice Horas Realiz. Corretivas"
 			            )
 			
 			                VAR IPM5 = 
 			                    CALCULATE(
 			                        [_m-R$MaiorMelhorAreasApoio],   
-			                        FAT_AREAS_APOIO[PILAR] = "Horas Produtivas"
+			                        'AREAS-APOIO'[PILAR] = "Horas Produtivas"
 			                )
 			
 			RETURN
@@ -765,35 +765,35 @@ table SOMA-TOTAL-PILAR-IPM
 			VAR EFICFERM = 
 			    CALCULATE(
 			        [_m-R$MaiorMelhorPcpAcumulado],     
-			        _DIM_Metas[Indicador] = "Eficiência Fermentação p/ Subprodutos",
-			        IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00000EFCTC",
-			        _DIM_Metas[Pilar] = "IPM"
+			        'AREAS-PRODUCAO'[Indicador] = "Eficiência Fermentação p/ Subprodutos",
+			        'PCP-ACUMULADO'[VAR_CODIGO] = "00000EFCTC",
+			        'AREAS-PRODUCAO'[Pilar] = "IPM"
 			    )
 			
 			    VAR EFICDEST = 
 			        CALCULATE(
 			            [_m-R$MaiorMelhorPcpAcumulado],      
-			            _DIM_Metas[Indicador] = "Eficiência Destilação",
-			            _DIM_Metas[Pilar] = "IPM",
-			            IPM_fDadosPCPAcumulado[VAR_CODIGO] = "00RENDDEST"
+			            'AREAS-PRODUCAO'[Indicador] = "Eficiência Destilação",
+			            'AREAS-PRODUCAO'[Pilar] = "IPM",
+			            'PCP-ACUMULADO'[VAR_CODIGO] = "00RENDDEST"
 			        )
 			
 			        VAR PH = 
 			            CALCULATE(
 			                [_m-R$ValorEntre_A_&_B_ProlancaXxx],
-			                _DIM_Metas[Pilar] = "IPM",
-			                _DIM_Metas[Indicador]= "Controle de pH (Etanol Hidratado)",
-			                IPM_fProlanca[VAR_CODIGO]="0PRODALCPH",
-			                IPM_fProlanca[LAN_HORA] = "XXXX",
-			                IPM_fProlanca[SUF_CODIGO]="01",
-			                IPM_fProlanca[100 SafraProlanca] = "2025/2026"
+			                'AREAS-PRODUCAO'[Pilar] = "IPM",
+			                'AREAS-PRODUCAO'[Indicador]= "Controle de pH (Etanol Hidratado)",
+			                'PCP-PROLANCA'[VAR_CODIGO]="0PRODALCPH",
+			                'PCP-PROLANCA'[LAN_HORA] = "XXXX",
+			                'PCP-PROLANCA'[SUF_CODIGO]="01",
+			                'PCP-PROLANCA'[100 SafraProlanca] = "2025/2026"
 			            )
 			
 			            VAR ACIDO = 
 			                CALCULATE(
-			                    _DIM_Metas[_m-R$MenorMelhor],
-			                    _DIM_Metas[Indicador] = "Consumo de Ácido Sulfúrico",
-			                    _DIM_Metas[Pilar] = "IPM"
+			                    'AREAS-PRODUCAO'[_m-R$MenorMelhor],
+			                    'AREAS-PRODUCAO'[Indicador] = "Consumo de Ácido Sulfúrico",
+			                    'AREAS-PRODUCAO'[Pilar] = "IPM"
 			            )
 			
 			RETURN

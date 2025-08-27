@@ -7,8 +7,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -26,8 +26,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -45,8 +45,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -64,8 +64,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -83,8 +83,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -102,8 +102,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -121,8 +121,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -140,8 +140,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -159,8 +159,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -178,8 +178,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -197,8 +197,8 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhor],
-			        '_DIM_Metas'[Indicador] = "Atendimento ao Custo  setorial",
-			        '_DIM_Metas'[Pilar] = "DEEP DIVE"
+			        'AREAS-PRODUCAO'[Indicador] = "Atendimento ao Custo  setorial",
+			        'AREAS-PRODUCAO'[Pilar] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPE] +
@@ -216,7 +216,7 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhorAreasApoio],
-			        'FAT_AREAS_APOIO'[PILAR] = "DEEP DIVE"
+			        'AREAS-APOIO'[PILAR] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPEAreasApoio] +
@@ -234,7 +234,7 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhorAreasApoio],
-			        'FAT_AREAS_APOIO'[PILAR] = "DEEP DIVE"
+			        'AREAS-APOIO'[PILAR] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPEAreasApoio] +
@@ -252,7 +252,7 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhorAreasApoio],
-			        'FAT_AREAS_APOIO'[PILAR] = "DEEP DIVE"
+			        'AREAS-APOIO'[PILAR] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPEAreasApoio] +
@@ -270,7 +270,7 @@ table SOMA-VALOR-TOTAL-PILARES
 			VAR CUSTOS = 
 			    CALCULATE(
 			        [_m-R$MenorMelhorAreasApoio],
-			        'FAT_AREAS_APOIO'[PILAR] = "DEEP DIVE"
+			        'AREAS-APOIO'[PILAR] = "DEEP DIVE"
 			    )
 			RETURN
 			    [_m-R$TotGPEAreasApoio] +

@@ -6,12 +6,12 @@ table SOMA-TOTAL-PILAR-GPE
 			VAR Dss = 
 			    CALCULATE(
 			        [_m-R$MaiorMelhorAreasApoio],
-			        FAT_AREAS_APOIO[PILAR] = "GPE - DSS"
+			        'AREAS-APOIO'[PILAR] = "GPE - DSS"
 			    )
 			VAR Reducao_Esquecimento = 
 			    CALCULATE(
 			        [_m-R$ReducaoEsquecimentoRegistroPontoAreasApoio],
-			        'FAT_AREAS_APOIO'[PILAR] = "GPE - Marcação Ponto"
+			        'AREAS-APOIO'[PILAR] = "GPE - Marcação Ponto"
 			    )
 			RETURN
 			    Dss + Reducao_Esquecimento
